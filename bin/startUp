@@ -1,0 +1,9 @@
+!#/bin/sh
+set -ex
+
+open -a Orbstack
+
+sleep 3
+
+symfony serve -d
+docker compose up -d

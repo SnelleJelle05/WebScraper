@@ -4,13 +4,20 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Repository\NewsRepository;
 use App\State\DataProvider;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\OpenApi\Model\Parameter;
 
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
-#[ApiResource(
+#[QueryParameter(
+    key: 'max',
+    schema: ['type' => 'interger'],
+    openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false,example: 10),
+    required: true
+)]#[ApiResource(
     operations: [
         new GetCollection(
             provider: DataProvider::class,

@@ -17,21 +17,24 @@
          $this->client = $client;
       }
 
-      public function fetchNewsUrl($maxRecords, $sourceCountry, $sourceLanguage): array
+
+      public function fetchNewsUrl($max): array
       {
+
          // Maak de API-aanroep met de hardcoded URL
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
-                 'query' => 'sourcecountry:'.$sourceCountry,'sourcelang:'.$sourceLanguage,
+                 'query' =>'sourcecountry:NL sourcelang:nld',
                  'mode' => 'ArtList',
-                 'maxrecords' => $maxRecords,
+                 'maxrecords' => $max,
                  'format' => 'json',
              ],
          ]);
+
          dump($response);
          // Controleer of de API-aanroep succesvol was
          if ($response->getStatusCode() !== 200) {
-            throw new \Exception('Failed to fetch data from GDELT API');
+            throw new \Exception('Failed to fetch data from GDELT API... Contact me.');
          }
 
          // Transformeer de API-respons naar een bruikbare array

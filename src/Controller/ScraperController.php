@@ -2,6 +2,8 @@
 
    namespace App\Controller;
 
+   use App\Entity\News;
+   use Doctrine\ORM\EntityManagerInterface;
    use GuzzleHttp\Exception\GuzzleException;
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
    use GuzzleHttp\Client;
@@ -9,7 +11,12 @@
 
    class ScraperController extends AbstractController
    {
+      private EntityManagerInterface $entityManager;
 
+      public function __construct(EntityManagerInterface $entityManager)
+      {
+         $this->entityManager = $entityManager;
+      }
       /**
        * @throws GuzzleException
        */
@@ -29,6 +36,16 @@
             $dateTime = $this->crawlWebsiteMetaProperty($url, 'article:published_time');
 
             $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime];
+
+            $news = new News();
+            $news->setTitle($title);
+            $news->setDescription($description);
+            $news->setSource($source);
+            $news->setImageUrl($imageUrl);
+            $news->setDate($dateTime);
+            $this->entityManager->persist($news);
+            $this->entityManager->flush();
+
          }
          return $array;
       }

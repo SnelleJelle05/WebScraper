@@ -30,10 +30,9 @@
          return $responseData['token'];
       }
 
-      public function get(string $uri): void
+      public function get(string $uri, array $queryParams = []): void
       {
-
-         $this->client->jsonRequest('GET', $uri);
+         $this->client->request('GET', $uri, $queryParams);
       }
 
       public function post(string $uri, array $content, string $token = null): void

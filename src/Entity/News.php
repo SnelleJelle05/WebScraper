@@ -7,6 +7,7 @@
    use ApiPlatform\Metadata\QueryParameter;
    use App\Repository\NewsRepository;
    use App\State\DataProvider;
+   use App\State\TestProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;
    use ApiPlatform\OpenApi\Model\Parameter;
@@ -23,6 +24,9 @@
    )] #[ApiResource(
        operations: [
            new GetCollection(
+               formats: ['json'],
+               description: "Get news articles from the web",
+               normalizationContext: ['groups' => ['user:read']],
                provider: DataProvider::class,
            ),
        ]
@@ -37,24 +41,31 @@
       private ?Uuid $id = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $title = null;
 
       #[ORM\Column(type: Types::TEXT, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $Description = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $Category = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $Source = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $ImageUrl = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      #[Groups(['user:read'])]
       private ?string $Date = null;
 
       #[ORM\Column(length: 255)]
+      #[Groups(['user:read'])]
       private ?string $website_url = null;
 
       public function getId(): ?Uuid
@@ -124,25 +135,25 @@
 
       public function getCategory(): ?string
       {
-          return $this->Category;
+         return $this->Category;
       }
 
       public function setCategory(?string $Category): static
       {
-          $this->Category = $Category;
+         $this->Category = $Category;
 
-          return $this;
+         return $this;
       }
 
       public function getWebsiteUrl(): ?string
       {
-          return $this->website_url;
+         return $this->website_url;
       }
 
       public function setWebsiteUrl(string $website_url): static
       {
-          $this->website_url = $website_url;
+         $this->website_url = $website_url;
 
-          return $this;
+         return $this;
       }
    }

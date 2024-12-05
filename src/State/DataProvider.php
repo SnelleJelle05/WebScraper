@@ -4,31 +4,25 @@
 
    use ApiPlatform\Metadata\Operation;
    use ApiPlatform\State\ProviderInterface;
-   use App\Controller\GetUrlArticlesController;
-   use App\Controller\ScraperController;
-   use GuzzleHttp\Exception\GuzzleException;
+   use App\Message\ScrapeWebsiteMessage;
+   use Symfony\Component\Messenger\Exception\ExceptionInterface;
+   use Symfony\Component\Messenger\MessageBusInterface;
 
    class DataProvider implements ProviderInterface
    {
-      private GetUrlArticlesController $getUrlArticlesController;
-      private ScraperController $ScraperController;
-
-
-      public function __construct(GetUrlArticlesController $getUrlArticlesController, ScraperController $ScraperController)
+      private MessageBusInterface $messageBus;
+      public function __construct(MessageBusInterface $messageBus)
       {
-         $this->getUrlArticlesController = $getUrlArticlesController;
-         $this->ScraperController = $ScraperController;
+         $this->messageBus = $messageBus;
       }
 
       /**
-       * @throws GuzzleException
-       * @throws \Exception
+       * @throws ExceptionInterface
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
-         $articlesUrl = $this->getUrlArticlesController->fetchNewsUrl($context['filters']['max'] );
-
-         return $this->ScraperController->Scrape($articlesUrl);
+         $this->messageBus->dispatch(new ScrapeWebsiteMessage());
+         return ['status' => 'Bizzy with scraping'];
       }
 
    }

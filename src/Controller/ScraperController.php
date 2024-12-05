@@ -34,6 +34,10 @@
             $imageUrl = $this->crawlerController->crawlWebsiteMetaProperty($websiteUrl, 'og:image');
 
             $dateTime = $this->crawlerController->crawlWebsiteMetaProperty($websiteUrl, 'article:published_time');
+            if ($dateTime == null){
+               $dateTime = $this->crawlerController->crawlWebsiteMetaPropertyDateFallBack($websiteUrl, 'article:published_time');
+            }
+
             $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime , 'WebsiteUrl' => $websiteUrl];
 
             $this->newsRepository->SaveArticle($title, $description, $source, $imageUrl, $dateTime, $websiteUrl);

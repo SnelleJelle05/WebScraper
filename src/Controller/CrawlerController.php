@@ -19,6 +19,7 @@
          $response = $client->request('GET', $url);
          $html = $response->getBody()->getContents();
          $crawler = new Crawler($html);
+         dump($crawler);
          return $crawler->filter("meta[property='{$object}']")->count()
              ? $crawler->filter("meta[property='{$object}']")->attr('content') : null;
       }
@@ -41,6 +42,18 @@
          $crawler = new Crawler($html);
          return $crawler->filter("meta[name='{$object}']")->count()
              ? $crawler->filter("meta[name='{$object}']")->attr('content') : null;
+      }
+
+      public function crawlWebsiteMetaPropertyDateFallBack($url, $object): ?string
+      {// in case first one is null
+//         <span class="posted-on"><time class="entry-date published" datetime="2024-12-05T13:28:28+01:00">5 december 2024 - 13:28</time></span> - CG -
+         $client = new Client();
+         $response = $client->request('GET', $url);
+         $html = $response->getBody()->getContents();
+         $crawler = new Crawler($html);
+         dump($crawler);
+         return $crawler->filter("time.entry-date.published")->count()
+             ? $crawler->filter("time.entry-date.published")->attr('datetime') : null;
       }
    }
 

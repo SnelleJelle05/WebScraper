@@ -16,28 +16,22 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
-    //    /**
-    //     * @return News[] Returns an array of News objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('n.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        /**
+         * @return News[] Returns an array of News objects
+         */
+        public function SaveArticle($title,$description,$source,$imageUrl,$dateTime,$websiteUrl)
+        {
+           $news = new News();
+           $news->setTitle($title);
+           $news->setDescription($description);
+           $news->setSource($source);
+           $news->setImageUrl($imageUrl);
+           $news->setDate($dateTime);
+           $news->setWebsiteUrl($websiteUrl);
 
-    //    public function findOneBySomeField($value): ?News
-    //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+           //save
+           $this->getEntityManager()->persist($news);
+           $this->getEntityManager()->flush();
+        }
+
 }

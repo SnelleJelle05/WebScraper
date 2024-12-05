@@ -25,6 +25,8 @@
                  'mode' => 'ArtList',
                  'maxrecords' => $max,
                  'format' => 'json',
+                'sort' => 'ToneDesc',
+                'timespan' => '1d',
              ],
          ]);
 

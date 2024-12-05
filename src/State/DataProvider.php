@@ -6,6 +6,7 @@
    use ApiPlatform\State\ProviderInterface;
    use App\Controller\GetUrlArticlesController;
    use App\Controller\ScraperController;
+   use GuzzleHttp\Exception\GuzzleException;
 
    class DataProvider implements ProviderInterface
    {
@@ -19,14 +20,15 @@
          $this->ScraperController = $ScraperController;
       }
 
+      /**
+       * @throws GuzzleException
+       * @throws \Exception
+       */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
-         $response = $this->getUrlArticlesController->fetchNewsUrl($context['filters']['max'] );
+         $articlesUrl = $this->getUrlArticlesController->fetchNewsUrl($context['filters']['max'] );
 
-         $data = $this->ScraperController->Scrape($response);
-         dump($data);
-
-         return $data;
+         return $this->ScraperController->Scrape($articlesUrl);
       }
 
    }

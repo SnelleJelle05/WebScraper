@@ -43,6 +43,9 @@
       private ?string $Description = null;
 
       #[ORM\Column(length: 255, nullable: true)]
+      private ?string $Category = null;
+
+      #[ORM\Column(length: 255, nullable: true)]
       private ?string $Source = null;
 
       #[ORM\Column(length: 255, nullable: true)]
@@ -50,6 +53,9 @@
 
       #[ORM\Column(length: 255, nullable: true)]
       private ?string $Date = null;
+
+      #[ORM\Column(length: 255)]
+      private ?string $website_url = null;
 
       public function getId(): ?Uuid
       {
@@ -114,5 +120,29 @@
          $this->Date = $Date;
 
          return $this;
+      }
+
+      public function getCategory(): ?string
+      {
+          return $this->Category;
+      }
+
+      public function setCategory(?string $Category): static
+      {
+          $this->Category = $Category;
+
+          return $this;
+      }
+
+      public function getWebsiteUrl(): ?string
+      {
+          return $this->website_url;
+      }
+
+      public function setWebsiteUrl(string $website_url): static
+      {
+          $this->website_url = $website_url;
+
+          return $this;
       }
    }

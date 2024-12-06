@@ -2,8 +2,8 @@
 
 namespace App\MessageHandler;
 
-use App\Controller\GetUrlArticlesController;
 use App\Controller\ScraperController;
+use App\Controller\UrlController\GetUrlArticlesController;
 use App\Message\ScrapeWebsiteMessage;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

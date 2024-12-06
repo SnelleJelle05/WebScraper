@@ -1,8 +1,13 @@
 <?php
 
-   namespace App\Controller;
+   namespace App\Controller\UrlController;
 
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
    use Symfony\Contracts\HttpClient\HttpClientInterface;
 
    class GetUrlArticlesController extends AbstractController
@@ -15,6 +20,13 @@
       }
 
 
+      /**
+       * @throws TransportExceptionInterface
+       * @throws ServerExceptionInterface
+       * @throws RedirectionExceptionInterface
+       * @throws DecodingExceptionInterface
+       * @throws ClientExceptionInterface
+       */
       public function fetchNewsUrl($max): array
       {
 

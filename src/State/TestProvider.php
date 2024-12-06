@@ -24,8 +24,8 @@
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
          $arr = [
-             ["url" => 'https://www.westerwoldeactueel.nl/2024/12/05/gezellige-kerstmarkt-in-woonservicecentrum-kloosterheerd/'],
-             ["url" => 'https://www.telegraaf.nl/vrouw/581748881/perfect-recept-voor-tijdens-de-feestdagen-luchtige-citroengrasmascarpone']
+             ["url" => 'https://www.xgn.nl/artikel/reageer-en-win-gratis-bioscoopkaartjes-voor-wicked?comment=6043'],
+//             ["url" => 'https://www.racexpress.nl/le-mans/porsche-x-iron-dames-because-every-dream-matters/n/141307']
          ];
          return $this->ScraperController->Scrape($arr);
 

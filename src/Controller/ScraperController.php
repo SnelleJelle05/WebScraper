@@ -42,21 +42,28 @@
        */
       public function Scrape($response): array
       {
-         foreach ($response as $article) {
-            $websiteUrl = $article['url'];
+         foreach ($response as $item) {
+            $websiteUrl = $item['url'];
+            try {
+               // gets the $var from the website
+               $title = $this->scrapeTitleController->scrapeTitle($websiteUrl);
+               $description = $this->scrapeDescriptionController->scrapeDescription($websiteUrl);
+               $source = $this->scrapeSourceController->scrapeSource($websiteUrl);
+               $imageUrl = $this->scrapeImageController->scrapeImage($websiteUrl);
+               $dateTime = $this->scrapeDateTimeController->scrapeDateTime($websiteUrl);
 
-            $title = $this->scrapeTitleController->scrapeTitle($websiteUrl);
-            $description = $this->scrapeDescriptionController->scrapeDescription($websiteUrl);
-            $source = $this->scrapeSourceController->scrapeSource($websiteUrl);
-            $imageUrl = $this->scrapeImageController->scrapeImage($websiteUrl);
-
-            $dateTime = $this->scrapeDateTimeController->scrapeDateTime($websiteUrl);
-
-            $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime, 'WebsiteUrl' => $websiteUrl];
-
-            $this->newsRepository->SaveArticle($title, $description, $source, $imageUrl, $dateTime, $websiteUrl); // dont save to db
-            return $array;
+               $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime, 'WebsiteUrl' => $websiteUrl];
+               dump($array);
+               $this->newsRepository->SaveArticle($title, $description, $source, $imageUrl, $dateTime, $websiteUrl); //saves to database
+            } catch (\Exception $e) {
+               dump("Scape error: " . $e->getMessage());
+            }
          }
-         return ['There was an error'];
+         // error handling
+         if (empty($array)) {
+            return ['status' => 'No articles found'];
+         }
+
+         return $array;
       }
    }

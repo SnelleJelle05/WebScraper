@@ -18,13 +18,15 @@ class ScrapeDateTimeController extends AbstractController
       $response = $client->request('GET', $url);
       $html = $response->getBody()->getContents();
       $crawler = new Crawler($html);
+
       $title =  $crawler->filter("meta[property='article:published_time']")->count()
-          ? $crawler->filter("meta[property='og:title']")->attr('content') : null;
+          ? $crawler->filter("meta[property='article:published_time']")->attr('content') : null;
 
       if ($title == null){
          $title = $crawler->filter("time.entry-date.published")->count()
              ? $crawler->filter("time.entry-date.published")->attr('datetime') : null;
       }
+
       if ($title == null){
          $title = $crawler->filter("meta[name='article:published_time']")->count()
              ? $crawler->filter("meta[name='article:published_time']")->attr('content') : null;

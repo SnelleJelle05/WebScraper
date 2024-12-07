@@ -21,8 +21,8 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
-         $this->messageBus->dispatch(new ScrapeWebsiteMessage());
-         return ['status' => 'Bizzy with scraping'];
+         $this->messageBus->dispatch(new ScrapeWebsiteMessage(($context['filters']['max'])));
+         return ['status' => 'Scraping...'];
       }
 
    }

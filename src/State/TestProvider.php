@@ -11,7 +11,6 @@
    {
       private ScraperController $ScraperController;
 
-
       public function __construct(ScraperController $ScraperController)
       {
          $this->ScraperController = $ScraperController;
@@ -24,8 +23,8 @@
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
          $arr = [
-             ["url" => 'https://www.xgn.nl/artikel/reageer-en-win-gratis-bioscoopkaartjes-voor-wicked?comment=6043'],
-//             ["url" => 'https://www.racexpress.nl/le-mans/porsche-x-iron-dames-because-every-dream-matters/n/141307']
+             ["url" => 'https://www.jdsupra.com/legalnews/texas-federal-district-court-issues-a-4849121/'],
+//             ["url" => 'https://www.racexpress.nl/le-mans/porsche-x-iron-dames-because-every-dream-matters/n/141307'],
          ];
          return $this->ScraperController->Scrape($arr);
 

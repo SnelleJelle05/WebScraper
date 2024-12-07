@@ -18,9 +18,10 @@ class ScrapeSourceController extends AbstractController
       $response = $client->request('GET', $url);
       $html = $response->getBody()->getContents();
       $crawler = new Crawler($html);
+      dump($crawler);
 
-      $source =  $crawler->filter("meta[property='og:name']")->count()
-          ? $crawler->filter("meta[property='og:name']")->attr('content') : null;
+      $source =  $crawler->filter("meta[property='og:site_name']")->count()
+          ? $crawler->filter("meta[property='og:site_name']")->attr('content') : null;
 
 
       return $source;

@@ -29,28 +29,24 @@
        */
       public function fetchNewsUrl($max): array
       {
-
-         // Maak de API-aanroep met de hardcoded URL
+         // gets ulr from GDELT API for scrape
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
-                 'query' =>'sourcecountry:NL sourcelang:nld',
+                 'query' => 'sourcecountry:US sourcelang:eng',
                  'mode' => 'ArtList',
                  'maxrecords' => $max,
                  'format' => 'json',
-                'sort' => 'ToneDesc',
-                'timespan' => '1d',
+                 'sort' => 'DateDesc',
+                 'timespan' => '1d',
              ],
          ]);
-
-         dump($response);
          // Controleer of de API-aanroep succesvol was
          if ($response->getStatusCode() !== 200) {
-            throw new \Exception('Failed to fetch data from GDELT API... Contact me.');
+            throw new \Exception('Failed to fetch data from GDELT API. -Contact me.');
          }
 
          // Transformeer de API-respons naar een bruikbare array
          $data = $response->toArray();
-
          return $data['articles'] ?? [];
       }
    }

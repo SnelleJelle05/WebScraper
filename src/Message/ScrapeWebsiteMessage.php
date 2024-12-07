@@ -4,13 +4,13 @@ namespace App\Message;
 
 final class ScrapeWebsiteMessage
 {
-    /*
-     * Add whatever properties and methods you need
-     * to hold the data for this message class.
-     */
+   public function __construct(
+       private int $max,
+   ) {
+   }
 
-    // public function __construct(
-    //     public readonly string $name,
-    // ) {
-    // }
+   public function getMax(): int
+   {
+      return $this->max;
+   }
 }

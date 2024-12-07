@@ -22,6 +22,11 @@ class ScrapeTitleController extends AbstractController
       $title =  $crawler->filter("meta[property='og:title']")->count()
           ? $crawler->filter("meta[property='og:title']")->attr('content') : null;
 
+      if ($title === null) {
+         $title = $crawler->filter('.article-title')->count()
+             ? $crawler->filter('.article-title')->text()
+             : null;
+      }
 
       return $title;
    }

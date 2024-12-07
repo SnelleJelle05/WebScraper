@@ -19,7 +19,7 @@ class NewsRepository extends ServiceEntityRepository
         /**
          * @return News[] Returns an array of News objects
          */
-        public function SaveArticle($title,$description,$source,$imageUrl,$dateTime,$websiteUrl)
+        public function SaveArticle($title,$description,$source,$imageUrl,$dateTime,$websiteUrl): void
         {
            $news = new News();
            $news->setTitle($title);

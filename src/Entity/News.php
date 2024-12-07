@@ -7,7 +7,6 @@
    use ApiPlatform\Metadata\QueryParameter;
    use App\Repository\NewsRepository;
    use App\State\DataProvider;
-   use App\State\TestProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;
    use ApiPlatform\OpenApi\Model\Parameter;
@@ -16,7 +15,12 @@
    use Symfony\Component\Uid\Uuid;
 
    #[ORM\Entity(repositoryClass: NewsRepository::class)]
-   #[ApiResource(
+   #[QueryParameter(
+       key: 'max',
+       schema: ['type' => 'interger'],
+       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
+       required: true
+   )] #[ApiResource(
        operations: [
            new GetCollection(
                formats: ['json'],
@@ -51,7 +55,7 @@
       #[Groups(['user:read'])]
       private ?string $Source = null;
 
-      #[ORM\Column(length: 255, nullable: true)]
+      #[ORM\Column(type: Types::TEXT, nullable: true)]
       #[Groups(['user:read'])]
       private ?string $ImageUrl = null;
 
@@ -59,7 +63,7 @@
       #[Groups(['user:read'])]
       private ?string $Date = null;
 
-      #[ORM\Column(length: 255)]
+      #[ORM\Column(type: Types::TEXT, nullable: true)]
       #[Groups(['user:read'])]
       private ?string $website_url = null;
 

@@ -23,8 +23,8 @@
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
          $arr = [
-//             ["url" => 'https://www.jdsupra.com/legalnews/texas-federal-court-temporarily-blocks-9635704/'],
-             ["url" => 'https://1035kissfmboise.com/post-malone-spotted-at-boise-state-game-hangs-at-downtown-bar-photos/'],
+             ["url" => 'https://www.earthquakenewstoday.com/2024/12/07/minor-earthquake-2-82-mag-was-detected-near-petrolia-in-ca-3/'],
+//             ["url" => 'https://www.aol.com/rusty-elderly-pup-enjoying-retirement-110340770.html'],
          ];
          return $this->ScraperController->Scrape($arr);
 

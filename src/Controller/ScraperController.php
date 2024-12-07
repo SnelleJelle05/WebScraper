@@ -52,7 +52,7 @@
                $response = $client->request('GET', $websiteUrl);
                $html = $response->getBody()->getContents();
                $crawler = new Crawler($html);
-
+               dump($crawler);
 
                // gets the $var from the website
                $title = $this->scrapeTitleController->scrapeTitle($crawler);

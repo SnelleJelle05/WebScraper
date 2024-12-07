@@ -49,7 +49,7 @@
 
       #[ORM\Column(length: 255, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $Category = null;
+      private ?string $Sentiment = null;
 
       #[ORM\Column(length: 255, nullable: true)]
       #[Groups(['user:read'])]
@@ -132,17 +132,18 @@
          return $this;
       }
 
-      public function getCategory(): ?string
+      public function getSentiment(): ?string
       {
-         return $this->Category;
+         return $this->Sentiment;
       }
 
-      public function setCategory(?string $Category): static
+      public function setSentiment(?string $Sentiment): static
       {
-         $this->Category = $Category;
-
+         $this->Sentiment = $Sentiment;
          return $this;
       }
+
+
 
       public function getWebsiteUrl(): ?string
       {

@@ -30,10 +30,21 @@
        */
       public function fetchNewsUrl($max): array
       {
+         $language = 'UnitedStates';
+         switch ($language) {
+            case "UnitedStates":
+               $query = 'sourcecountry:US sourcelang:ENG';
+               break;
+            case "Dutch":
+               $query = 'sourcecountry:NL sourcelang:NLD';
+               break;
+            default:
+               $query = 'sourcecountry:US sourcelang:eng';
+         }
          // gets ulr from GDELT API for scrape
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
-                 'query' => 'sourcecountry:US sourcelang:eng',
+                 'query' => $query,
                  'mode' => 'ArtList',
                  'maxrecords' => $max,
                  'format' => 'json',

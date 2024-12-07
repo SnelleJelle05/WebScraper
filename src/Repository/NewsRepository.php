@@ -21,8 +21,6 @@
        */
       public function SaveArticle($data): void
       {
-         dumP($data);
-
          try {
             $news = (new News())
                 ->setTitle($data['title'])
@@ -30,11 +28,11 @@
                 ->setSource($data['source'])
                 ->setImageUrl($data['imageUrl'])
                 ->setDate($data['dateTime'])
-                ->setWebsiteUrl($data['websiteUrl']);
+                ->setWebsiteUrl($data['websiteUrl'])
+                ->setSentiment($data['sentiment']);
 
             $this->getEntityManager()->persist($news);
             $this->getEntityManager()->flush();
-            dump($news);
          } catch (\Throwable $e) {
             // Log the exception with context for easier debugging
             dump([

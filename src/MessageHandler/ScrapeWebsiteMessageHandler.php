@@ -2,6 +2,7 @@
 
    namespace App\MessageHandler;
 
+   use App\Controller\SentimentAnalyzerController;
    use App\Repository\NewsRepository;
    use App\Controller\ScrapeControllers\{
        ScrapeDateTimeController,
@@ -24,7 +25,8 @@
           private ScrapeDescriptionController $scrapeDescriptionController,
           private ScrapeSourceController      $scrapeSourceController,
           private ScrapeImageController       $scrapeImageController,
-          private ScrapeDateTimeController    $scrapeDateTimeController
+          private ScrapeDateTimeController    $scrapeDateTimeController,
+          private SentimentAnalyzerController $sentimentAnalyzerController,
       )
       {
       }
@@ -46,6 +48,10 @@
                $data = $this->CrawlData($crawler, $website);
 
                if ($data['title']) {
+                  //only analyze sentiment if the title is not empty
+                  $sentiment = $this->sentimentAnalyzerController->analyzerSentiment($data);
+                  $data['sentiment'] = $sentiment;
+
                   // must have a title to save the article
                   $this->newsRepository->SaveArticle($data);
                }
@@ -94,7 +100,7 @@
              'source' => $source,
              'imageUrl' => $imageUrl,
              'dateTime' => $dateTime,
-             'websiteUrl' => $website['url']
+             'websiteUrl' => $website['url'],
          ];
       }
    }

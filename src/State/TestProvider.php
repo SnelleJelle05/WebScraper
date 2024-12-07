@@ -5,7 +5,6 @@
    use ApiPlatform\Metadata\Operation;
    use ApiPlatform\State\ProviderInterface;
    use App\Message\ScrapeWebsiteMessage;
-   use GuzzleHttp\Exception\GuzzleException;
    use Symfony\Component\Messenger\Exception\ExceptionInterface;
    use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -19,7 +18,6 @@
       }
 
       /**
-       * @throws GuzzleException
        * @throws \Exception
        * @throws ExceptionInterface
        */
@@ -27,7 +25,7 @@
       {
          $websiteUrls = [
 //             ["url" => 'https://abc6onyourside.com/news/local/patients-worried-about-coverage-amid-osu-insurance-contract-battle-anthem-blue-cross-blue-shield-contract-negotiation-standoff'],
-             ["url" => 'https://www.oklahomacitysun.com/news/274831735/seton-hall-seeks-ame-page-mentality-in-game-vs-oklahoma-state'],
+             ["url" => 'https://921thebeat.iheart.com/content/2024-12-07-timeless-hit-crowned-most-popular-christmas-song-of-all-time/'],
          ];
 
          return $this->messageBus->dispatch(new ScrapeWebsiteMessage($websiteUrls));

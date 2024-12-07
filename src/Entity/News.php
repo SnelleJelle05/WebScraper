@@ -16,12 +16,7 @@
    use Symfony\Component\Uid\Uuid;
 
    #[ORM\Entity(repositoryClass: NewsRepository::class)]
-   #[QueryParameter(
-       key: 'max',
-       schema: ['type' => 'interger'],
-       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
-       required: true
-   )] #[ApiResource(
+   #[ApiResource(
        operations: [
            new GetCollection(
                formats: ['json'],

@@ -28,14 +28,14 @@
        * @throws ClientExceptionInterface
        * @throws \Exception
        */
-      public function fetchNewsUrl($max): array
+      public function fetchNewsUrl(): array
       {
          // gets ulr from GDELT API for scrape
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
                  'query' => 'sourcecountry:US sourcelang:eng',
                  'mode' => 'ArtList',
-                 'maxrecords' => $max,
+                 'maxrecords' => 100,
                  'format' => 'json',
                  'sort' => 'DateDesc',
                  'timespan' => '1d',

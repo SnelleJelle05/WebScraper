@@ -11,6 +11,7 @@
    class DataProvider implements ProviderInterface
    {
       private MessageBusInterface $messageBus;
+
       public function __construct(MessageBusInterface $messageBus)
       {
          $this->messageBus = $messageBus;
@@ -21,7 +22,7 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
-         $this->messageBus->dispatch(new ScrapeWebsiteMessage(($context['filters']['max'])));
+         $this->messageBus->dispatch(new ScrapeWebsiteMessage());
          return ['status' => 'Scraping...'];
       }
 

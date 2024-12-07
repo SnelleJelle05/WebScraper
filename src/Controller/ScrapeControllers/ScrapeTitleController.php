@@ -14,18 +14,16 @@
 
          $title = $crawler->filter("meta[property='og:title']")->count()
              ? $crawler->filter("meta[property='og:title']")->attr('content') : null;
-
+         duMP($title);
          if (!$title) {
             $title = $crawler->filter('.article-title')->count()
-                ? $crawler->filter('.article-title')->text()
-                : null;
+                ? $crawler->filter('.article-title')->text() : null;
          }
 
          // gets the <title> tag
          if (!$title) {
             $title = $crawler->filter('title')->count()
-                ? $crawler->filter('title')->text()
-                : null;
+                ? $crawler->filter('title')->text() : null;
          }
 
          return $title;

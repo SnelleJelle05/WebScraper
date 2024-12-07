@@ -28,7 +28,7 @@
 
          // if the date is in a different format, convert it to ISO 8601
          if ($dateTime) {
-            $dateTime = Carbon::parse($dateTime)->toIso8601String();
+            $dateTime = Carbon::parse($dateTime)->format('Ymd\THis\Z');
          }
          return $dateTime;
       }

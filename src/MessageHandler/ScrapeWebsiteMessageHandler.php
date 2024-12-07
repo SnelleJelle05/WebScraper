@@ -37,18 +37,18 @@
             throw new \InvalidArgumentException('No website URLs provided.');
          }
          $client = new Client();
-
          foreach ($websites as $website) {
             try {
                $websiteUrl = $website['url'];
                $response = $client->request('GET', $websiteUrl);
                $html = $response->getBody()->getContents();
                $crawler = new Crawler($html);
-
                $data = $this->CrawlData($crawler, $website);
 
-               // Persist the scraped data
-               $this->newsRepository->SaveArticle($data);
+               if ($data['title']) {
+                  // must have a title to save the article
+                  $this->newsRepository->SaveArticle($data);
+               }
 
             } catch (\Throwable $e) {
                // Log the exception with context for easier debugging
@@ -63,29 +63,27 @@
          return 'Scrape finished successfully.';
       }
 
-
-      private function CrawlData($crawler, $website)
+      private function CrawlData($crawler, $website): array
       {
-
          // Scrape content
-         $title = $website['title'];
-         if ($title) {
+         $title = $website['title'] ?? null;
+         if (!$title) {
             $title = $this->scrapeTitleController->scrapeTitle($crawler);
          }
 
-         $description = $this->scrapeDescriptionController->scrapeDescription($crawler);
+         $description = $this->scrapeDescriptionController->scrapeDescription($crawler) ?? null;
 
-         $source = $website['domain'];
+         $source = $website['domain'] ?? null;
          if (!$source) {
             $source = $this->scrapeSourceController->scrapeSource($crawler);
          }
 
-         $imageUrl = $website['socialimage'];
+         $imageUrl = $website['socialimage'] ?? null;
          if (!$imageUrl) {
             $imageUrl = $this->scrapeImageController->scrapeImage($crawler);
          }
 
-         $dateTime = $website['seendate'];
+         $dateTime = $website['seendate'] ?? null;
          if (!$dateTime) {
             $dateTime = $this->scrapeDateTimeController->scrapeDateTime($crawler);
          }

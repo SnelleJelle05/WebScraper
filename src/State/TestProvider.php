@@ -26,8 +26,8 @@
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Symfony\Component\Messenger\Envelope
       {
          $websiteUrls = [
-             ["url" => 'http://www.newson6.com/story/64ddf94c57c6ce0730b84a06/weather-blog:-mild-weekend-ahead-rain-chances-increase-in-southeast-oklahoma'],
-             ["url" => 'https://isp.netscape.com/news/world/story/0001/20241207/f9d74be4f3516eea499033aaf0f4f0d1'],
+//             ["url" => 'https://abc6onyourside.com/news/local/patients-worried-about-coverage-amid-osu-insurance-contract-battle-anthem-blue-cross-blue-shield-contract-negotiation-standoff'],
+             ["url" => 'https://www.oklahomacitysun.com/news/274831735/seton-hall-seeks-ame-page-mentality-in-game-vs-oklahoma-state'],
          ];
 
          return $this->messageBus->dispatch(new ScrapeWebsiteMessage($websiteUrls));

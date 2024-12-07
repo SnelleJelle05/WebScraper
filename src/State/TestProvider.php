@@ -4,29 +4,33 @@
 
    use ApiPlatform\Metadata\Operation;
    use ApiPlatform\State\ProviderInterface;
-   use App\Controller\ScraperController;
+   use App\Message\ScrapeWebsiteMessage;
    use GuzzleHttp\Exception\GuzzleException;
+   use Symfony\Component\Messenger\Exception\ExceptionInterface;
+   use Symfony\Component\Messenger\MessageBusInterface;
 
    class TestProvider implements ProviderInterface
    {
-      private ScraperController $ScraperController;
+      private MessageBusInterface $messageBus;
 
-      public function __construct(ScraperController $ScraperController)
+      public function __construct(MessageBusInterface $messageBus)
       {
-         $this->ScraperController = $ScraperController;
+         $this->messageBus = $messageBus;
       }
 
       /**
        * @throws GuzzleException
        * @throws \Exception
+       * @throws ExceptionInterface
        */
-      public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+      public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Symfony\Component\Messenger\Envelope
       {
-         $arr = [
-             ["url" => 'https://www.wvasfm.org/2024-12-07/internet-sleuths-are-trying-to-solve-the-new-york-ceo-killing'],
-             ["url" => 'https://www.apr.org/science-health/2024-12-07/how-many-species-could-go-extinct-from-climate-change-it-depends-on-how-hot-it-gets'],
+         $websiteUrls = [
+             ["url" => 'http://www.newson6.com/story/64ddf94c57c6ce0730b84a06/weather-blog:-mild-weekend-ahead-rain-chances-increase-in-southeast-oklahoma'],
+             ["url" => 'https://isp.netscape.com/news/world/story/0001/20241207/f9d74be4f3516eea499033aaf0f4f0d1'],
          ];
-         return $this->ScraperController->Scrape($arr);
+
+         return $this->messageBus->dispatch(new ScrapeWebsiteMessage($websiteUrls));
 
       }
    }

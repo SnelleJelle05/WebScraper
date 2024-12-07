@@ -2,6 +2,7 @@
 
    namespace App\MessageHandler;
 
+   use App\Repository\NewsRepository;
    use App\Controller\ScrapeControllers\{
        ScrapeDateTimeController,
        ScrapeDescriptionController,
@@ -9,12 +10,8 @@
        ScrapeSourceController,
        ScrapeTitleController
    };
-   use App\Controller\UrlController\GetUrlArticlesController;
-   use App\Entity\News;
    use App\Message\ScrapeWebsiteMessage;
-   use Doctrine\ORM\EntityManagerInterface;
    use GuzzleHttp\Client;
-   use GuzzleHttp\Exception\GuzzleException;
    use Symfony\Component\DomCrawler\Crawler;
    use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -22,8 +19,7 @@
    final class ScrapeWebsiteMessageHandler
    {
       public function __construct(
-          private GetUrlArticlesController    $getUrlArticlesController,
-          private EntityManagerInterface      $entityManager,
+          private NewsRepository              $newsRepository,
           private ScrapeTitleController       $scrapeTitleController,
           private ScrapeDescriptionController $scrapeDescriptionController,
           private ScrapeSourceController      $scrapeSourceController,
@@ -33,60 +29,26 @@
       {
       }
 
-      /**
-       * Handles the scraping logic for website articles.
-       *
-       * @param ScrapeWebsiteMessage $message The scrape message.
-       * @return string The result of the scraping process.
-       * @throws GuzzleException If an HTTP request fails.
-       */
       public function __invoke(ScrapeWebsiteMessage $message): string
       {
-         $articleUrls = $this->getUrlArticlesController->fetchNewsUrl($message->getMax());
+         $websites = $message->getwebsites();
 
-         if (empty($articleUrls)) {
-            return 'No articles found.';
+         if (!$websites) {
+            throw new \InvalidArgumentException('No website URLs provided.');
          }
-
          $client = new Client();
 
-         foreach ($articleUrls as $articleData) {
-            $websiteUrl = $articleData['url'];
-
+         foreach ($websites as $website) {
             try {
-               // Fetch and parse the website content
+               $websiteUrl = $website['url'];
                $response = $client->request('GET', $websiteUrl);
                $html = $response->getBody()->getContents();
                $crawler = new Crawler($html);
 
-               // Scrape content
-               $title = $this->scrapeTitleController->scrapeTitle($crawler);
-               $description = $this->scrapeDescriptionController->scrapeDescription($crawler);
-               $source = $this->scrapeSourceController->scrapeSource($crawler);
-               $imageUrl = $this->scrapeImageController->scrapeImage($crawler);
-               $dateTime = $this->scrapeDateTimeController->scrapeDateTime($crawler);
+               $data = $this->CrawlData($crawler, $website);
 
                // Persist the scraped data
-               try {
-                  $news = (new News())
-                      ->setTitle($title)
-                      ->setDescription($description)
-                      ->setSource($source)
-                      ->setImageUrl($imageUrl)
-                      ->setDate($dateTime)
-                      ->setWebsiteUrl($websiteUrl);
-
-                  $this->entityManager->persist($news);
-                  $this->entityManager->flush();
-
-               } catch (\Throwable $e) {
-                  // Log the exception with context for easier debugging
-                  dump([
-                      'Database Error' => $e->getMessage(),
-                      'URL' => $websiteUrl,
-                  ]);
-                  continue; // Skip to the next article
-               }
+               $this->newsRepository->SaveArticle($data);
 
             } catch (\Throwable $e) {
                // Log the exception with context for easier debugging
@@ -100,4 +62,42 @@
          }
          return 'Scrape finished successfully.';
       }
+
+
+      private function CrawlData($crawler, $website)
+      {
+
+         // Scrape content
+         $title = $website['title'];
+         if ($title) {
+            $title = $this->scrapeTitleController->scrapeTitle($crawler);
+         }
+
+         $description = $this->scrapeDescriptionController->scrapeDescription($crawler);
+
+         $source = $website['domain'];
+         if (!$source) {
+            $source = $this->scrapeSourceController->scrapeSource($crawler);
+         }
+
+         $imageUrl = $website['socialimage'];
+         if (!$imageUrl) {
+            $imageUrl = $this->scrapeImageController->scrapeImage($crawler);
+         }
+
+         $dateTime = $website['seendate'];
+         if (!$dateTime) {
+            $dateTime = $this->scrapeDateTimeController->scrapeDateTime($crawler);
+         }
+
+         return [
+             'title' => $title,
+             'description' => $description,
+             'source' => $source,
+             'imageUrl' => $imageUrl,
+             'dateTime' => $dateTime,
+             'websiteUrl' => $website['url']
+         ];
+      }
    }
+

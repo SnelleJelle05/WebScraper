@@ -5,12 +5,14 @@ namespace App\Message;
 final class ScrapeWebsiteMessage
 {
    public function __construct(
-       private int $max,
+       private array $websites
    ) {
    }
 
-   public function getMax(): int
+   public function getwebsites(): array
    {
-      return $this->max;
+      return $this->websites;
    }
+
+
 }

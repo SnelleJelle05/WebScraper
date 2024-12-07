@@ -8,8 +8,10 @@
    use App\Controller\ScrapeControllers\ScrapeSourceController;
    use App\Controller\ScrapeControllers\ScrapeTitleController;
    use App\Repository\NewsRepository;
+   use GuzzleHttp\Client;
    use GuzzleHttp\Exception\GuzzleException;
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\DomCrawler\Crawler;
 
    class ScraperController extends AbstractController
    {
@@ -45,12 +47,19 @@
          foreach ($response as $item) {
             $websiteUrl = $item['url'];
             try {
+               // makes a new crawler object, and uses for each scrape the same for better performance.
+               $client = new Client();
+               $response = $client->request('GET', $websiteUrl);
+               $html = $response->getBody()->getContents();
+               $crawler = new Crawler($html);
+
+
                // gets the $var from the website
-               $title = $this->scrapeTitleController->scrapeTitle($websiteUrl);
-               $description = $this->scrapeDescriptionController->scrapeDescription($websiteUrl);
-               $source = $this->scrapeSourceController->scrapeSource($websiteUrl);
-               $imageUrl = $this->scrapeImageController->scrapeImage($websiteUrl);
-               $dateTime = $this->scrapeDateTimeController->scrapeDateTime($websiteUrl);
+               $title = $this->scrapeTitleController->scrapeTitle($crawler);
+               $description = $this->scrapeDescriptionController->scrapeDescription($crawler);
+               $source = $this->scrapeSourceController->scrapeSource($crawler);
+               $imageUrl = $this->scrapeImageController->scrapeImage($crawler);
+               $dateTime = $this->scrapeDateTimeController->scrapeDateTime($crawler);
 
                $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime, 'WebsiteUrl' => $websiteUrl];
                $this->newsRepository->SaveArticle($title, $description, $source, $imageUrl, $dateTime, $websiteUrl); //saves to database
@@ -65,5 +74,4 @@
          }
          return $array;
       }
-
    }

@@ -19,7 +19,7 @@
    #[QueryParameter(
        key: 'max',
        schema: ['type' => 'interger'],
-       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 3),
+       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
        required: true
    )] #[ApiResource(
        operations: [

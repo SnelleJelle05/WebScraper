@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Controller\ScrapeControllers;
+   namespace App\Controller\ScrapeControllers;
 
-use GuzzleHttp\Client;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DomCrawler\Crawler;
+   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ScrapeDescriptionController extends AbstractController
-{
-   public function scrapeDescription($url): ?string
+   class ScrapeDescriptionController extends AbstractController
    {
-      $client = new Client();
-      $response = $client->request('GET', $url);
-      $html = $response->getBody()->getContents();
-      $crawler = new Crawler($html);
+      public function scrapeDescription($crawler): ?string
+      {
 
-      $description =  $crawler->filter("meta[property='og:description']")->count()
-          ? $crawler->filter("meta[property='og:description']")->attr('content') : null;
+         $description = $crawler->filter("meta[property='og:description']")->count()
+             ? $crawler->filter("meta[property='og:description']")->attr('content') : null;
 
 
-      return $description;
+         return $description;
+      }
    }
-}

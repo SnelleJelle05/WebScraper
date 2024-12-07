@@ -24,7 +24,7 @@
       {
          $arr = [
 //             ["url" => 'https://www.jdsupra.com/legalnews/texas-federal-court-temporarily-blocks-9635704/'],
-             ["url" => 'https://www.ledgertranscript.com/Temple-Cookies-With-Olaf-58260383'],
+             ["url" => 'https://1035kissfmboise.com/post-malone-spotted-at-boise-state-game-hangs-at-downtown-bar-photos/'],
          ];
          return $this->ScraperController->Scrape($arr);
 

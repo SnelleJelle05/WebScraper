@@ -1,29 +1,18 @@
 <?php
 
-namespace App\Controller\ScrapeControllers;
+   namespace App\Controller\ScrapeControllers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DomCrawler\Crawler;
+   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ScrapeSourceController extends AbstractController
-{
-   /**
-    * @throws GuzzleException
-    */
-   public function scrapeSource($url): ?string
+   class ScrapeSourceController extends AbstractController
    {
-      $client = new Client();
-      $response = $client->request('GET', $url);
-      $html = $response->getBody()->getContents();
-      $crawler = new Crawler($html);
-      dump($crawler);
 
-      $source =  $crawler->filter("meta[property='og:site_name']")->count()
-          ? $crawler->filter("meta[property='og:site_name']")->attr('content') : null;
+      public function scrapeSource($crawler): ?string
+      {
+         $source = $crawler->filter("meta[property='og:site_name']")->count()
+             ? $crawler->filter("meta[property='og:site_name']")->attr('content') : null;
 
 
-      return $source;
+         return $source;
+      }
    }
-}

@@ -28,15 +28,15 @@
        * @throws ClientExceptionInterface
        * @throws \Exception
        */
-      public function fetchNewsUrl($max): array
+      public function fetchNewsUrl($max, $language): array
       {
          $language = 'Dutch';
 
          switch ($language) {
-            case "UnitedStates":
+            case "unitedStates":
                $query = 'sourcecountry:US sourcelang:ENG';
                break;
-            case "Dutch":
+            case "dutch":
                $query = 'sourcecountry:NL sourcelang:NLD';
                break;
             default:

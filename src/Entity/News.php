@@ -19,6 +19,11 @@
        key: 'max',
        schema: ['type' => 'interger'],
        openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
+       required: true)]
+   #[QueryParameter(
+       key: 'Language/Location',
+       schema: ['type' => 'string'],
+       openApi: new Parameter(name: 'Language/Location', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
        required: true
    )] #[ApiResource(
        operations: [
@@ -147,7 +152,6 @@
       }
 
 
-
       public function getWebsiteUrl(): ?string
       {
          return $this->website_url;
@@ -162,13 +166,13 @@
 
       public function getLanguage(): ?string
       {
-          return $this->language;
+         return $this->language;
       }
 
       public function setLanguage(string $language): static
       {
-          $this->language = $language;
+         $this->language = $language;
 
-          return $this;
+         return $this;
       }
    }

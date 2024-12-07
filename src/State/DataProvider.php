@@ -36,7 +36,7 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
       {
-         $websites = $this->getUrlArticlesController->fetchNewsUrl($context['filters']['max']);
+         $websites = $this->getUrlArticlesController->fetchNewsUrl($context['filters']['max'], $context['filters']['Language/Location']);
          $this->messageBus->dispatch(new ScrapeWebsiteMessage($websites));
          return ['status' => 'Scraping...'];
       }

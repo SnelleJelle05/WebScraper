@@ -30,7 +30,8 @@
        */
       public function fetchNewsUrl($max): array
       {
-         $language = 'UnitedStates';
+         $language = 'Dutch';
+
          switch ($language) {
             case "UnitedStates":
                $query = 'sourcecountry:US sourcelang:ENG';

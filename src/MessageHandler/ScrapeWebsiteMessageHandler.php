@@ -101,6 +101,7 @@
              'imageUrl' => $imageUrl,
              'dateTime' => $dateTime,
              'websiteUrl' => $website['url'],
+            'language' => $website['language'],
          ];
       }
    }

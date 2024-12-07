@@ -67,6 +67,9 @@
       #[Groups(['user:read'])]
       private ?string $website_url = null;
 
+      #[ORM\Column(length: 255)]
+      private ?string $language = null;
+
       public function getId(): ?Uuid
       {
          return $this->id;
@@ -155,5 +158,17 @@
          $this->website_url = $website_url;
 
          return $this;
+      }
+
+      public function getLanguage(): ?string
+      {
+          return $this->language;
+      }
+
+      public function setLanguage(string $language): static
+      {
+          $this->language = $language;
+
+          return $this;
       }
    }

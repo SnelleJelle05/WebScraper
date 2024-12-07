@@ -29,7 +29,8 @@
                 ->setImageUrl($data['imageUrl'])
                 ->setDate($data['dateTime'])
                 ->setWebsiteUrl($data['websiteUrl'])
-                ->setSentiment($data['sentiment']);
+                ->setSentiment($data['sentiment'])
+                ->setLanguage($data['language']);
 
             $this->getEntityManager()->persist($news);
             $this->getEntityManager()->flush();

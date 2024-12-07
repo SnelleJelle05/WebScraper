@@ -26,6 +26,7 @@
        * @throws RedirectionExceptionInterface
        * @throws DecodingExceptionInterface
        * @throws ClientExceptionInterface
+       * @throws \Exception
        */
       public function fetchNewsUrl($max): array
       {

@@ -13,7 +13,7 @@
 
    class ScraperController extends AbstractController
    {
-      private NewsRepository $newsRepository;
+      private  NewsRepository $newsRepository;
       private ScrapeTitleController $scrapeTitleController;
       private ScrapeDescriptionController $scrapeDescriptionController;
       private ScrapeSourceController $scrapeSourceController;
@@ -53,17 +53,17 @@
                $dateTime = $this->scrapeDateTimeController->scrapeDateTime($websiteUrl);
 
                $array[] = ['Title' => $title, 'Description' => $description, 'Source' => $source, 'ImageUrl' => $imageUrl, 'Date' => $dateTime, 'WebsiteUrl' => $websiteUrl];
-               dump($array);
                $this->newsRepository->SaveArticle($title, $description, $source, $imageUrl, $dateTime, $websiteUrl); //saves to database
             } catch (\Exception $e) {
-               dump("Scape error: " . $e->getMessage());
+               // error handling
+               dump("Scape error: " . $e);
             }
          }
          // error handling
          if (empty($array)) {
-            return ['status' => 'No articles found'];
+            return ['status' => 'No articles found.'];
          }
-
          return $array;
       }
+
    }

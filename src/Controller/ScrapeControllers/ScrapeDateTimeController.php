@@ -4,11 +4,14 @@
 
    use Carbon\Carbon;
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\DomCrawler\Crawler;
 
    class ScrapeDateTimeController extends AbstractController
    {
       public function scrapeDateTime($crawler): ?string
       {
+         assert($crawler instanceof  Crawler);
+
          // must be saved as ISO 8601 date format
          $dateTime = $crawler->filter("meta[property='article:published_time']")->count()
              ? $crawler->filter("meta[property='article:published_time']")->attr('content') : null;

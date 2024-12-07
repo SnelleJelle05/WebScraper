@@ -3,12 +3,15 @@
    namespace App\Controller\ScrapeControllers;
 
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\DomCrawler\Crawler;
 
    class ScrapeTitleController extends AbstractController
    {
 
       public function scrapeTitle($crawler): ?string
       {
+         assert($crawler instanceof  Crawler);
+
          $title = $crawler->filter("meta[property='og:title']")->count()
              ? $crawler->filter("meta[property='og:title']")->attr('content') : null;
 

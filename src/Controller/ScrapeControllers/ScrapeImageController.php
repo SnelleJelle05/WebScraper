@@ -3,11 +3,14 @@
    namespace App\Controller\ScrapeControllers;
 
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\DomCrawler\Crawler;
 
    class ScrapeImageController extends AbstractController
    {
       public function scrapeImage($crawler): ?string
       {
+         assert($crawler instanceof  Crawler);
+
          $image = $crawler->filter("meta[property='og:image']")->count()
              ? $crawler->filter("meta[property='og:image']")->attr('content') : null;
 

@@ -14,4 +14,8 @@ when@test:
         intercept_redirects: false
 
     framework:
-        profiler: { collect: false }
+        profiler:
+            enabled: true
+            collect: true
+            dsn: 'file:%kernel.project_dir%/var/cache/dev/profiler'
+            #see test in profiler

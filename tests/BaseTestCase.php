@@ -6,7 +6,7 @@
    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
    use function Zenstruck\Foundry\faker;
 
-   class TestTemplate extends WebTestCase
+   class BaseTestCase extends WebTestCase
    {
 
       protected \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
@@ -16,6 +16,7 @@
       {
          // Initialize the client inside the setUp method
          $this->client = static::createClient();
+
       }
 
       public function jsonResponse(): array

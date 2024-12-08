@@ -1,8 +1,10 @@
 <?php
 
-   namespace App\Tests;
+   namespace App\Tests\Functional;
 
-   class ScraperTest extends TestTemplate
+   use App\Tests\BaseTestCase;
+
+   class ScraperBaseTest extends BaseTestCase
    {
       public function testScraper()
       {

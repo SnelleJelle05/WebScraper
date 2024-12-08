@@ -5,11 +5,11 @@
    use ApiPlatform\Metadata\ApiResource;
    use ApiPlatform\Metadata\GetCollection;
    use ApiPlatform\Metadata\QueryParameter;
+   use ApiPlatform\OpenApi\Model\Parameter;
    use App\Repository\NewsRepository;
-   use App\State\DataProvider;
+   use App\State\Providers\DataProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;
-   use ApiPlatform\OpenApi\Model\Parameter;
    use Symfony\Bridge\Doctrine\Types\UuidType;
    use Symfony\Component\Serializer\Attribute\Groups;
    use Symfony\Component\Uid\Uuid;

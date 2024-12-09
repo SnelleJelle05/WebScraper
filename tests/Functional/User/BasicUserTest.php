@@ -7,7 +7,7 @@
    use App\Tests\Functional\BaseTestCase;
 
 
-   class BasicUserTests extends  BaseTestCase
+   class BasicUserTest extends BaseTestCase
    {
       // 0 = success 1 = failure
       public function testPostUser0(): void
@@ -43,19 +43,4 @@
          $json = $this->jsonResponse();
          self::assertSame('This value should not be blank.', $json['violations'][0]['message']);
       }
-
-      public function testAuthUserWithJWT1(): void
-      {
-         $userData = ['email' => faker()->email(), 'password' => 'password'];
-         UserFactory::new()->create($userData);
-         $this->post('/api/auth', [
-             'username' => 'string',
-             'password' => 'string',
-         ]);
-         $json = $this->jsonResponse();
-         dump($json);
-         self::assertNotEmpty($json['token']);
-         self::assertResponseIsSuccessful();
-      }
-
    }

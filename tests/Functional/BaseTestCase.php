@@ -21,17 +21,6 @@
          $this->client->setServerParameter('HTTP_ORIGIN', 'http://phpunit');
       }
 
-      public function postAuth(string $username, string $password): ?string
-      {
-         // iam usin JWT for authentication
-         $this->post("/auth", ['username' => $username, 'password' => $password]);
-         $content = $this->client->getResponse()->getContent();
-         // Decode as an associative array (with 'true' as the second argument)
-         $decodedToken = json_decode($content, true);
-         // Return the token
-         return $decodedToken['token'] ?? null;
-      }
-
       public function jsonResponse(): array
       {
          $content = $this->client->getResponse()->getContent();

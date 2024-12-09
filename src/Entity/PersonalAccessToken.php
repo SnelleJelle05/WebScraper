@@ -5,9 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PersonalAccessTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PersonalAccessTokenRepository::class)]
-#[ApiResource]
 class PersonalAccessToken
 {
     #[ORM\Id]
@@ -16,6 +16,7 @@ class PersonalAccessToken
     private ?int $id = null;
 
     #[ORM\Column(length: 64, unique: true)]
+   #[Groups(['PAT:read', 'PAT:write'])]
     private ?string $token = null;
 
     #[ORM\OneToOne(inversedBy: 'personalAccessToken', cascade: ['persist', 'remove'])]

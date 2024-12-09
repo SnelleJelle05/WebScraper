@@ -3,11 +3,11 @@
    namespace App\Entity;
 
    use ApiPlatform\Metadata\ApiResource;
-   use ApiPlatform\Metadata\Delete;
    use ApiPlatform\Metadata\Get;
-   use ApiPlatform\Metadata\Patch;
+   use ApiPlatform\Metadata\GetCollection;
    use ApiPlatform\Metadata\Post;
    use App\Repository\UserRepository;
+   use App\State\Providers\GeneratePersonalAccessTokenProvider;
    use Doctrine\ORM\Mapping as ORM;
    use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
    use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,10 +20,15 @@
    #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
    #[ApiResource(
        operations: [
-           new Get(),
+           new Get(
+               uriTemplate: '/users/GeneratePersonalAccessTokenProvider',
+               description: 'Generate a personal access token for the user thats logged in',
+               security: 'is_granted("ROLE_USER")',
+               name: 'GeneratePersonalAccessTokenProvider',
+               provider: GeneratePersonalAccessTokenProvider::class
+           ),
            new Post(),
-           new Delete(),
-           new Patch(),
+          new GetCollection(),
        ],
        normalizationContext: ['groups' => ['user:read']],
        denormalizationContext: ['groups' => ['user:write']]
@@ -61,7 +66,6 @@
       private ?string $plainPassword = null;
 
       #[ORM\OneToOne(mappedBy: 'relatedUser', cascade: ['persist', 'remove'])]
-      #[Groups(['user:read'])]
       private ?PersonalAccessToken $personalAccessToken = null;
 
       public function getId(): ?int

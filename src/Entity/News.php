@@ -7,7 +7,7 @@
    use ApiPlatform\Metadata\QueryParameter;
    use ApiPlatform\OpenApi\Model\Parameter;
    use App\Repository\NewsRepository;
-   use App\State\Providers\DataProvider;
+   use App\State\Providers\News\DataProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;
    use Symfony\Bridge\Doctrine\Types\UuidType;

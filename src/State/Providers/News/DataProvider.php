@@ -1,6 +1,6 @@
 <?php
 
-   namespace App\State\Providers;
+   namespace App\State\Providers\News;
 
    use ApiPlatform\Metadata\Operation;
    use ApiPlatform\State\ProviderInterface;

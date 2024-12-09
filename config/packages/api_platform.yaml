@@ -1,4 +1,10 @@
 api_platform:
+  swagger:
+    api_keys:
+      JWT:
+        name: Authorization
+        type: header
+
   title: Scraperrr
   version: 1.0.0
   defaults:

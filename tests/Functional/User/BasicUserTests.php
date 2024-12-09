@@ -2,17 +2,18 @@
 
    namespace App\Tests\Functional\User;
 
-   use App\Tests\BaseTestCase;
-   use BasicUserTest;
+   use App\Factory\UserFactory;
    use function Zenstruck\Foundry\faker;
+   use App\Tests\Functional\BaseTestCase;
 
-   class BasicUserTests extends BaseTestCase
+
+   class BasicUserTests extends  BaseTestCase
    {
       // 0 = success 1 = failure
       public function testPostUser0(): void
       {
          $this->post('/api/users', [
-             'email' => faker()->userName,
+             'email' => faker()->email,
              'password' => $this->password,
          ]);
 
@@ -25,7 +26,7 @@
       public function testPostUserEmail1(): void
       {
          $this->post('/api/users', [
-             'email' => faker()->userName,
+             'email' => faker()->email(),
          ]);
 
          $this->assertResponseStatusCodeSame(422);
@@ -43,5 +44,18 @@
          self::assertSame('This value should not be blank.', $json['violations'][0]['message']);
       }
 
+      public function testAuthUserWithJWT1(): void
+      {
+         $userData = ['email' => faker()->email(), 'password' => 'password'];
+         UserFactory::new()->create($userData);
+         $this->post('/api/auth', [
+             'username' => 'string',
+             'password' => 'string',
+         ]);
+         $json = $this->jsonResponse();
+         dump($json);
+         self::assertNotEmpty($json['token']);
+         self::assertResponseIsSuccessful();
+      }
 
    }

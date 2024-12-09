@@ -38,6 +38,7 @@
       private ?int $id = null;
 
       #[ORM\Column(length: 180)]
+      #[NotBlank]
       #[Groups(['user:read', 'user:write'])]
       private ?string $email = null;
 

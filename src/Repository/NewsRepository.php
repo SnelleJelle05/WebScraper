@@ -6,9 +6,7 @@
    use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
    use Doctrine\Persistence\ManagerRegistry;
 
-   /**
-    * @extends ServiceEntityRepository<News>
-    */
+
    class NewsRepository extends ServiceEntityRepository
    {
       public function __construct(ManagerRegistry $registry)
@@ -31,7 +29,6 @@
                 ->setWebsiteUrl($data['websiteUrl'])
                 ->setSentiment($data['sentiment'])
                 ->setLanguage($data['language']);
-
             $this->getEntityManager()->persist($news);
             $this->getEntityManager()->flush();
          } catch (\Throwable $e) {
@@ -42,4 +39,23 @@
             ]);
          }
       }
+
+      public function getArticles(): array
+      {
+         return $this->createQueryBuilder('n')
+             ->select('n.title', 'n.description', 'n.source', 'n.imageUrl', 'n.date', 'n.websiteUrl', 'n.sentiment', 'n.language')
+             ->setMaxResults(10)
+             ->getQuery()
+             ->getResult();
+      }
+      public function findOneBySomeField($value): ?News
+      {
+         return $this->createQueryBuilder('n')
+             ->andWhere('n.exampleField = :val')
+             ->setParameter('val', $value)
+             ->getQuery()
+             ->getOneOrNullResult()
+             ;
+      }
+
    }

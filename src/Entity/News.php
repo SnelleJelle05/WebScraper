@@ -6,34 +6,65 @@
    use ApiPlatform\Metadata\GetCollection;
    use ApiPlatform\Metadata\QueryParameter;
    use ApiPlatform\OpenApi\Model\Parameter;
-   use App\Repository\NewsRepository;
+   use App\Repository\UserRepository;
    use App\State\Providers\News\DataProvider;
+   use App\State\Providers\News\NewsDataBaseProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;
    use Symfony\Bridge\Doctrine\Types\UuidType;
    use Symfony\Component\Serializer\Attribute\Groups;
    use Symfony\Component\Uid\Uuid;
 
-   #[ORM\Entity(repositoryClass: NewsRepository::class)]
-   #[QueryParameter(
-       key: 'max',
-       schema: ['type' => 'interger'],
-       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
-       required: true)]
-   #[QueryParameter(
-       key: 'Language/Location',
-       schema: ['type' => 'string'],
-       openApi: new Parameter(name: 'Language/Location', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
-       required: true
-   )] #[ApiResource(
+
+   #[ORM\Entity(repositoryClass: UserRepository::class)]
+   #[ORM\Table(name: '`news`')]
+   #[ApiResource(
        operations: [
            new GetCollection(
+               uriTemplate: '/news/scrape',
                formats: ['json'],
-               description: "Get news articles from the web",
+               description: "Scrape news articles from the web",
                normalizationContext: ['groups' => ['user:read']],
                provider: DataProvider::class,
+               parameters: [
+                   new QueryParameter(
+                       key: 'max',
+                       schema: ['type' => 'interger'],
+                       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
+                       required: false),
+                   new QueryParameter(
+                       key: 'Language/Location',
+                       schema: ['type' => 'string'],
+                       openApi: new Parameter(name: 'Language/Location', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
+                       required: false),
+               ]
            ),
-       ]
+
+           new GetCollection(
+               uriTemplate: '/api/news/v1',
+               formats: ['json'],
+               description: "Get news articles from the database",
+               normalizationContext: ['groups' => ['user:read']],
+               provider: NewsDataBaseProvider::class,
+               parameters: [
+                   new QueryParameter(
+                       key: 'max',
+                       schema: ['type' => 'interger'],
+                       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
+                       required: false),
+                   new QueryParameter(
+                       key: 'api_key',
+                       schema: ['type' => 'string'],
+                       openApi: new Parameter(name: 'api_key', in: 'query', allowEmptyValue: false),
+                       required: true),
+                   new QueryParameter(
+                       key: 'Language/Location',
+                       schema: ['type' => 'string'],
+                       openApi: new Parameter(name: 'language', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
+                       required: false),
+               ]
+           )
+       ],
    )]
    class News
    {
@@ -50,29 +81,30 @@
 
       #[ORM\Column(type: Types::TEXT, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $Description = null;
+      private ?string $description = null;
 
       #[ORM\Column(length: 255, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $Sentiment = null;
+      private ?string $sentiment = null;
 
       #[ORM\Column(length: 255, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $Source = null;
+      private ?string $source = null;
 
       #[ORM\Column(type: Types::TEXT, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $ImageUrl = null;
+      private ?string $imageUrl = null;
 
       #[ORM\Column(length: 255, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $Date = null;
+      private ?string $date = null;
 
       #[ORM\Column(type: Types::TEXT, nullable: true)]
       #[Groups(['user:read'])]
-      private ?string $website_url = null;
+      private ?string $websiteUrl = null;
 
       #[ORM\Column(length: 255)]
+      #[Groups(['user:read'])]
       private ?string $language = null;
 
       public function getId(): ?Uuid
@@ -94,24 +126,24 @@
 
       public function getDescription(): ?string
       {
-         return $this->Description;
+         return $this->description;
       }
 
-      public function setDescription(?string $Description): static
+      public function setDescription(?string $description): static
       {
-         $this->Description = $Description;
+         $this->description = $description;
 
          return $this;
       }
 
       public function getSource(): ?string
       {
-         return $this->Source;
+         return $this->source;
       }
 
-      public function setSource(?string $Source): static
+      public function setSource(?string $source): static
       {
-         $this->Source = $Source;
+         $this->source = $source;
 
          return $this;
       }
@@ -130,36 +162,36 @@
 
       public function getDate(): ?string
       {
-         return $this->Date;
+         return $this->date;
       }
 
-      public function setDate(?string $Date): static
+      public function setDate(?string $date): static
       {
-         $this->Date = $Date;
+         $this->date = $date;
 
          return $this;
       }
 
       public function getSentiment(): ?string
       {
-         return $this->Sentiment;
+         return $this->sentiment;
       }
 
       public function setSentiment(?string $Sentiment): static
       {
-         $this->Sentiment = $Sentiment;
+         $this->sentiment = $Sentiment;
          return $this;
       }
 
 
       public function getWebsiteUrl(): ?string
       {
-         return $this->website_url;
+         return $this->websiteUrl;
       }
 
-      public function setWebsiteUrl(string $website_url): static
+      public function setWebsiteUrl(string $websiteUrl): static
       {
-         $this->website_url = $website_url;
+         $this->websiteUrl = $websiteUrl;
 
          return $this;
       }

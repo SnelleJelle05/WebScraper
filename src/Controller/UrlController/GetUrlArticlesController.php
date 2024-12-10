@@ -39,8 +39,11 @@
             case "dutch":
                $query = 'sourcecountry:NL sourcelang:NLD';
                break;
+            case "unitedKingdom":
+               $query = 'sourcecountry:UK sourcelang:ENG';
+               break;
             default:
-               $query = 'sourcecountry:US sourcelang:eng';
+               $query = '(sourcecountry:US OR sourcecountry:UK) sourcelang:eng';
          }
          // gets ulr from GDELT API for scrape
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [

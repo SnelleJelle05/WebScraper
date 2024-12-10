@@ -7,7 +7,7 @@
    use function PHPUnit\Framework\assertNotEmpty;
    use function Zenstruck\Foundry\faker;
 
-   class GeneratePatBaseTest extends BaseTestCase
+   class GeneratePatTest extends BaseTestCase
    {
       public function testGetPAT0()
       {

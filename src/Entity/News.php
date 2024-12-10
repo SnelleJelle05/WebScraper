@@ -42,7 +42,6 @@
 
            new GetCollection(
                uriTemplate: '/api/news/v1',
-               formats: ['json'],
                description: "Get news articles from the database",
                normalizationContext: ['groups' => ['user:read']],
                provider: NewsDataBaseProvider::class,
@@ -55,12 +54,17 @@
                    new QueryParameter(
                        key: 'api_key',
                        schema: ['type' => 'string'],
-                       openApi: new Parameter(name: 'api_key', in: 'query', allowEmptyValue: false),
+                       openApi: new Parameter(name: 'api_key', in: 'query', allowEmptyValue: false,example: 'xxxxx-xxxxx-xxxxx-xxxxx-xxxxx'),
                        required: true),
                    new QueryParameter(
-                       key: 'Language/Location',
+                       key: 'language',
                        schema: ['type' => 'string'],
-                       openApi: new Parameter(name: 'language', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
+                       openApi: new Parameter(name: 'language', in: 'query', allowEmptyValue: false, example: 'English'),
+                       required: false),
+                   new QueryParameter(
+                       key: 'sourceCountry',
+                       schema: ['type' => 'string'],
+                       openApi: new Parameter(name: 'sourceCountry', in: 'query', allowEmptyValue: false, example: 'United States'),
                        required: false),
                ]
            )
@@ -106,6 +110,9 @@
       #[ORM\Column(length: 255)]
       #[Groups(['user:read'])]
       private ?string $language = null;
+
+      #[ORM\Column(length: 255, nullable: true)]
+      private ?string $sourceCountry = null;
 
       public function getId(): ?Uuid
       {
@@ -204,6 +211,18 @@
       public function setLanguage(string $language): static
       {
          $this->language = $language;
+
+         return $this;
+      }
+
+      public function getSourceCountry(): ?string
+      {
+         return $this->sourceCountry;
+      }
+
+      public function setSourceCountry(?string $sourceCountry): static
+      {
+         $this->sourceCountry = $sourceCountry;
 
          return $this;
       }

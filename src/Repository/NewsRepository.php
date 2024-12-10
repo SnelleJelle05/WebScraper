@@ -19,6 +19,7 @@
        */
       public function SaveArticle($data): void
       {
+         dump($data);
          try {
             $news = (new News())
                 ->setTitle($data['title'])
@@ -28,7 +29,9 @@
                 ->setDate($data['dateTime'])
                 ->setWebsiteUrl($data['websiteUrl'])
                 ->setSentiment($data['sentiment'])
-                ->setLanguage($data['language']);
+                ->setLanguage($data['language'])
+               ->setSourceCountry($data['sourcecountry'])
+            ;
             $this->getEntityManager()->persist($news);
             $this->getEntityManager()->flush();
          } catch (\Throwable $e) {
@@ -39,23 +42,16 @@
             ]);
          }
       }
-
-      public function getArticles(): array
+      public function getArticles($max, $language, $sourceCountry): array
       {
          return $this->createQueryBuilder('n')
-             ->select('n.title', 'n.description', 'n.source', 'n.imageUrl', 'n.date', 'n.websiteUrl', 'n.sentiment', 'n.language')
-             ->setMaxResults(10)
+             ->select('n.title', 'n.description', 'n.source', 'n.imageUrl', 'n.date', 'n.websiteUrl', 'n.sentiment', 'n.language','n.sourceCountry')
+             ->setMaxResults($max)
+             ->andWhere('n.language = :language')
+             ->setParameter('language', $language)
+             ->andWhere('n.sourceCountry = :sourcecountry')
+               ->setParameter('sourcecountry', $sourceCountry)
              ->getQuery()
              ->getResult();
       }
-      public function findOneBySomeField($value): ?News
-      {
-         return $this->createQueryBuilder('n')
-             ->andWhere('n.exampleField = :val')
-             ->setParameter('val', $value)
-             ->getQuery()
-             ->getOneOrNullResult()
-             ;
-      }
-
    }

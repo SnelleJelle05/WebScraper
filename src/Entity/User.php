@@ -22,7 +22,6 @@
        operations: [
            new Get(
                uriTemplate: '/users/GeneratePersonalAccessToken',
-               security: 'is_granted("ROLE_USER")',
                name: 'GeneratePersonalAccessToken!',
                provider: GeneratePersonalAccessTokenProvider::class
            ),

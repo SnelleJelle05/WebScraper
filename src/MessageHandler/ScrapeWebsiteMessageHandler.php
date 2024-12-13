@@ -55,7 +55,6 @@
                   // must have a title to save the article
                   $this->newsRepository->SaveArticle($data);
                }
-
             } catch (\Throwable $e) {
                // Log the exception with context for easier debugging
                dump([
@@ -101,8 +100,8 @@
              'imageUrl' => $imageUrl,
              'dateTime' => $dateTime,
              'websiteUrl' => $website['url'],
-            'language' => $website['language'],
-            'sourcecountry' => $website['sourcecountry'],
+             'language' => $website['language'],
+             'sourcecountry' => $website['sourcecountry'],
          ];
       }
    }

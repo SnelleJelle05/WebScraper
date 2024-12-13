@@ -9,7 +9,6 @@
    use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
    use Symfony\Component\Security\Core\Exception\AuthenticationException;
    use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
-   use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
    use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
    class PatAuthenticator extends AbstractAuthenticator
@@ -25,23 +24,28 @@
 
       public function supports(Request $request): ?bool
       {
-         // chek if the request has an Authorization header
-         return $request->headers->has('Authorization');
-      }
+         dump("1234");
+         return $request;
+         }
 
       public function authenticate(Request $request): SelfValidatingPassport
       {
+
          // get the token from the Authorization header
-         $token = $request->headers->get('Authorization');
-         $token = str_replace('Bearer ', '', $token);
+//         $token = $request->headers->get('Authorization');
+//         $token = str_replace('Bearer ', '', $token);
+//
+//         $pat = $this->personalAccessTokenRepository->findOneBy(['token' => $token]);
+//
+//         return new SelfValidatingPassport(
+//             new UserBadge($pat->getUser()->getEmail(), function ($userIdentifier) {
+//                return $this->userRepository->findOneByEmail($userIdentifier);
+//             })
+//         );
+         dump('authenticate');
+         return true;
 
-         $pat = $this->personalAccessTokenRepository->findOneBy(['token' => $token]);
 
-         return new SelfValidatingPassport(
-             new UserBadge($pat->getUser()->getEmail(), function ($userIdentifier) {
-                return $this->userRepository->findOneByEmail($userIdentifier);
-             })
-         );
       }
 
       public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

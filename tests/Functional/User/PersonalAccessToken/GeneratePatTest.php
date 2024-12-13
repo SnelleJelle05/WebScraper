@@ -23,7 +23,7 @@
          self::assertNotEmpty($token);
          self::assertResponseIsSuccessful();
 
-         $this->get('/api/users/GeneratePersonalAccessTokenProvider', [], $token);
+         $this->get('/api/users/GeneratePersonalAccessToken', [], $token);
          $json = $this->jsonResponse();
          self::assertResponseIsSuccessful();
          assertNotEmpty($json['token']);

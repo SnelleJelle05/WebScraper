@@ -16,30 +16,11 @@
    use Symfony\Component\Uid\Uuid;
 
 
-   #[ORM\Entity(repositoryClass: UserRepository::class)]
+   #[
+       ORM\Entity(repositoryClass: UserRepository::class)]
    #[ORM\Table(name: '`news`')]
    #[ApiResource(
        operations: [
-           new GetCollection(
-               uriTemplate: '/news/scrape',
-               formats: ['json'],
-               description: "Scrape news articles from the web",
-               normalizationContext: ['groups' => ['user:read']],
-               provider: DataProvider::class,
-               parameters: [
-                   new QueryParameter(
-                       key: 'max',
-                       schema: ['type' => 'interger'],
-                       openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
-                       required: false),
-                   new QueryParameter(
-                       key: 'Language/Location',
-                       schema: ['type' => 'string'],
-                       openApi: new Parameter(name: 'Language/Location', in: 'query', allowEmptyValue: false, example: 'unitedStates'),
-                       required: false),
-               ]
-           ),
-
            new GetCollection(
                uriTemplate: '/api/news/v1',
                description: "Get news articles from the database",
@@ -68,7 +49,7 @@
                        required: false),
                ]
            )
-       ],
+       ]
    )]
    class News
    {
@@ -157,12 +138,12 @@
 
       public function getImageUrl(): ?string
       {
-         return $this->ImageUrl;
+         return $this->imageUrl;
       }
 
       public function setImageUrl(?string $ImageUrl): static
       {
-         $this->ImageUrl = $ImageUrl;
+         $this->imageUrl = $ImageUrl;
 
          return $this;
       }
@@ -189,7 +170,6 @@
          $this->sentiment = $Sentiment;
          return $this;
       }
-
 
       public function getWebsiteUrl(): ?string
       {

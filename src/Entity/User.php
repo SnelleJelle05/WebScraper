@@ -21,7 +21,7 @@
    #[ApiResource(
        operations: [
            new Get(
-               uriTemplate: '/users/GeneratePersonalAccessTokenProvider',
+               uriTemplate: '/users/GeneratePersonalAccessToken',
                description: 'Generate a personal access token for the user thats logged in',
                security: 'is_granted("ROLE_USER")',
                name: 'GeneratePersonalAccessTokenProvider',

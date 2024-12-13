@@ -17,4 +17,15 @@
          parent::__construct($registry, PersonalAccessToken::class);
       }
 
+      public function findUserByToken(string $pat): ?PersonalAccessToken
+      {
+         return $this->createQueryBuilder('p')
+             ->innerJoin('p.relatedUser', 'r') // Join with the 'relatedUser' association
+             ->select('p', 'r')  // Select both the root entity 'p' and the related 'r' entity
+             ->andWhere('p.token = :token')
+             ->setParameter('token', $pat)
+             ->getQuery()
+             ->getOneOrNullResult(); // Since you're expecting a single result, use getOneOrNullResult()
+      }
    }
+

@@ -8,17 +8,18 @@
    use App\Entity\User;
    use App\Repository\PersonalAccessTokenRepository;
    use Doctrine\ORM\EntityManagerInterface;
-   use PHPUnit\Util\Json;
    use Random\RandomException;
    use Symfony\Bundle\SecurityBundle\Security;
    use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-   use function PHPUnit\Framework\assertNotEmpty;
 
    class GeneratePersonalAccessTokenProvider implements ProviderInterface
    {
 
-
-      public function __construct(private readonly Security $security, private EntityManagerInterface $em, private PersonalAccessTokenRepository $personalAccessTokenRepository)
+      public function __construct(
+          private readonly Security               $security,
+          private readonly EntityManagerInterface $em,
+          private PersonalAccessTokenRepository   $personalAccessTokenRepository,
+      )
       {
       }
 
@@ -27,6 +28,7 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
       {
+         dump($this->security->getUser());
          $user = $this->security->getUser();
 
          if (!$user) {
@@ -42,7 +44,6 @@
              substr($rawToken, 10, 5) . '-' .
              substr($rawToken, 15, 5) . '-' .
              substr($rawToken, 20, 5);
-
 
          if ($user->getPersonalAccessToken()) {
             $pat = $user->getPersonalAccessToken()->setToken($token);

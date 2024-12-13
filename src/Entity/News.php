@@ -22,7 +22,7 @@
    #[ApiResource(
        operations: [
            new GetCollection(
-               uriTemplate: '/api/news/v1',
+               uriTemplate: '/v1/news',
                description: "Get news articles from the database",
                normalizationContext: ['groups' => ['user:read']],
                provider: NewsDataBaseProvider::class,
@@ -33,9 +33,9 @@
                        openApi: new Parameter(name: 'max', in: 'query', allowEmptyValue: false, example: 25),
                        required: false),
                    new QueryParameter(
-                       key: 'api_key',
+                       key: 'apiKey',
                        schema: ['type' => 'string'],
-                       openApi: new Parameter(name: 'api_key', in: 'query', allowEmptyValue: false,example: 'xxxxx-xxxxx-xxxxx-xxxxx-xxxxx'),
+                       openApi: new Parameter(name: 'apiKey', in: 'query', allowEmptyValue: false, example: 'xxxxx-xxxxx-xxxxx-xxxxx-xxxxx'),
                        required: true),
                    new QueryParameter(
                        key: 'language',

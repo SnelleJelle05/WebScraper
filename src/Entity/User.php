@@ -22,13 +22,12 @@
        operations: [
            new Get(
                uriTemplate: '/users/GeneratePersonalAccessToken',
-               description: 'Generate a personal access token for the user thats logged in',
                security: 'is_granted("ROLE_USER")',
-               name: 'GeneratePersonalAccessTokenProvider',
+               name: 'GeneratePersonalAccessToken!',
                provider: GeneratePersonalAccessTokenProvider::class
            ),
            new Post(),
-          new GetCollection(),
+           new GetCollection(),
        ],
        normalizationContext: ['groups' => ['user:read']],
        denormalizationContext: ['groups' => ['user:write']]

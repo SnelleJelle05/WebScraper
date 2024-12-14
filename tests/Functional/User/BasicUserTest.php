@@ -2,7 +2,6 @@
 
    namespace App\Tests\Functional\User;
 
-   use App\Factory\UserFactory;
    use function Zenstruck\Foundry\faker;
    use App\Tests\Functional\BaseTestCase;
 
@@ -10,7 +9,7 @@
    class BasicUserTest extends BaseTestCase
    {
       // 0 = success 1 = failure
-      public function testPostUser0(): void
+      public function testPostUserSuc(): void
       {
          $this->post('/api/users', [
              'email' => faker()->email,
@@ -23,7 +22,7 @@
          self::assertNotSame($json['password'], $this->password);
       }
 
-      public function testPostUserEmail1(): void
+      public function testPostUserEmailErr(): void
       {
          $this->post('/api/users', [
              'email' => faker()->email(),
@@ -34,7 +33,7 @@
          self::assertSame('This value should not be blank.', $json['violations'][0]['message']);
       }
 
-      public function testPostUserPassword1(): void
+      public function testPostUserPasswordErr(): void
       {
          $this->post('/api/users', [
              'password' => $this->password,

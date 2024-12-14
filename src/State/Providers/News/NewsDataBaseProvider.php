@@ -5,7 +5,6 @@
    use ApiPlatform\Metadata\Operation;
    use ApiPlatform\State\ProviderInterface;
    use App\Repository\NewsRepository;
-   use Symfony\ComponentHttpFoundation\Request;
 
    readonly class NewsDataBaseProvider implements ProviderInterface
    {

@@ -9,7 +9,7 @@
 
    class v1Test extends BaseTestCase
    {
-      public function testGetArticles()
+      public function testGetArticlesSuc()
       {
          $userData = ['email' => faker()->email(), 'password' => 'password'];
          UserFactory::new()->create($userData);
@@ -17,6 +17,7 @@
              'email' => $userData['email'],
              'password' => $userData['password'],
          ]);
+         //authenticate
          $json = $this->jsonResponse();
          self::assertNotEmpty($json['token']);
          self::assertResponseIsSuccessful();
@@ -30,14 +31,13 @@
 
          assertNotEmpty($pat);
          $parameters = [
-             'apiKey' => $pat,  // Ensure this is a real API key or placeholder
+             'apiKey' => $pat['token'],  // Ensure this is a real API key or placeholder
              'max' => 3,
              'language' => 'English',
              'sourceCountry' => 'United States',
-             'apikey' => 'your_api_key',
          ];
 
-         $url = '/api/newsV1?' . http_build_query($parameters);
+         $url = '/api/v1/news?' . http_build_query($parameters);
 
          $this->get($url, []);  // Pass the JWT token in the headers
          $json = $this->jsonResponse();
@@ -45,10 +45,10 @@
          self::assertResponseIsSuccessful();
       }
 
-      public function testNewsv1()
+      public function testNewsV1InvalidPat0()
       {
          $parameters = [
-             'apiKey' => 'valid_api_key',  // Ensure this is a real API key or placeholder
+             'apiKey' => "invalid",  // Ensure this is a real API key or placeholder
              'max' => 3,
              'language' => 'English',
              'sourceCountry' => 'United States',
@@ -57,9 +57,8 @@
          $this->get('api/v1/news?' . http_build_query($parameters), []);
          $json = $this->jsonResponse();
          dump($json);
-         self::assertResponseIsSuccessful();
-         self::assertSame(200, $json['status']);
-         self::assertSame(3, $json['total']);
+         self::assertResponseStatusCodeSame(401);
+
       }
 
    }

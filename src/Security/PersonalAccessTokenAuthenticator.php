@@ -27,7 +27,12 @@
 
       public function authenticate(Request $request): Passport
       {
-         $token = $this->personalAccessTokenRepository->findUserByToken($request->query->get('apiKey'));
+         $apiKey = $request->query->all()['apiKey'] ?? null;
+         if (!$apiKey) {
+            throw new AuthenticationException('PAT Key is required');
+         }
+
+         $token = $this->personalAccessTokenRepository->findUserByToken($apiKey);
 
          if (!$token) {
             throw new AuthenticationException('Invalid API Key');

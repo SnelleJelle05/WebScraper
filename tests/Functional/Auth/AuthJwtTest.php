@@ -5,7 +5,6 @@
    use App\Factory\UserFactory;
    use App\Tests\Functional\BaseTestCase;
    use function Zenstruck\Foundry\faker;
-   use function Zenstruck\Foundry\lazy;
 
    class AuthJwtTest extends BaseTestCase
    {
@@ -22,6 +21,7 @@
          self::assertNotEmpty($json['token']);
          self::assertResponseIsSuccessful();
       }
+
       public function testAuthUserWithJWT0(): void
       {
          $this->post('/auth', [
@@ -29,5 +29,26 @@
              'password' => 'password',
          ]);
          self::assertResponseStatusCodeSame(401);
+      }
+
+      public function testAuthUserWithJWTNoEmail1(): void
+      {
+         $this->post('/auth', [
+             'password' => 'password',
+         ]);
+         $json = $this->jsonResponse();
+         self::assertResponseStatusCodeSame(400);
+         self::assertSame('The key "email" must be provided.', $json['detail']);
+      }
+
+      public function testAuthUserWithJWTNoPassword1(): void
+      {
+         $this->post('/auth', [
+             'email' => faker()->email(),
+
+         ]);
+         $json = $this->jsonResponse();
+         self::assertResponseStatusCodeSame(400);
+         self::assertSame('The key "password" must be provided.', $json['detail']);
       }
    }

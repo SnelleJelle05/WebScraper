@@ -1,11 +1,9 @@
 <?php
 
-   namespace App\Controller;
+   namespace App\Controller\PersonalAccessToken;
 
-   use ApiPlatform\Metadata\Operation;
    use App\Entity\PersonalAccessToken;
    use App\Entity\User;
-   use App\Repository\PersonalAccessTokenRepository;
    use Doctrine\ORM\EntityManagerInterface;
    use Random\RandomException;
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,7 +50,6 @@
          // Save the token
          $this->em->persist($pat);
          $this->em->flush();
-         dump($user->getPersonalAccessToken());
          return ['token' => $token];
       }
    }

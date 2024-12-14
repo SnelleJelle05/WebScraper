@@ -1,8 +1,7 @@
 <?php
 
-   namespace App\Controller;
+   namespace App\Controller\Funtions;
 
-   use App\Entity\News;
    use Sentiment\Analyzer;
    use Stichoza\GoogleTranslate\GoogleTranslate;
    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

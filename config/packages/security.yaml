@@ -28,9 +28,10 @@ security:
       pattern: ^/api/
       stateless: true
       provider: app_user_provider
+      jwt: ~
       custom_authenticator:
         - App\Security\PersonalAccessTokenAuthenticator
-      jwt: ~
+
   access_control:
   # - { path: ^/admin, roles: ROLE_ADMIN }
   # - { path: ^/profile, roles: ROLE_USER }

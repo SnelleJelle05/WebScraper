@@ -2,16 +2,14 @@
 
    namespace App\MessageHandler;
 
-   use App\Controller\SentimentAnalyzerController;
-   use App\Repository\NewsRepository;
-   use App\Controller\ScrapeControllers\{
-       ScrapeDateTimeController,
+   use App\Controller\Funtions\SentimentAnalyzerController;
+   use App\Controller\ScrapeControllers\{ScrapeDateTimeController,
        ScrapeDescriptionController,
        ScrapeImageController,
        ScrapeSourceController,
-       ScrapeTitleController
-   };
+       ScrapeTitleController};
    use App\Message\ScrapeWebsiteMessage;
+   use App\Repository\NewsRepository;
    use GuzzleHttp\Client;
    use Symfony\Component\DomCrawler\Crawler;
    use Symfony\Component\Messenger\Attribute\AsMessageHandler;

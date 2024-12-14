@@ -2,14 +2,14 @@
 
 namespace App\Message;
 
-final class ScrapeWebsiteMessage
+final readonly class ScrapeWebsiteMessage
 {
    public function __construct(
        private array $websites
    ) {
    }
 
-   public function getwebsites(): array
+   public function getWebsites(): array
    {
       return $this->websites;
    }

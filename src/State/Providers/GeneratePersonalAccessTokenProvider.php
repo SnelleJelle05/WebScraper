@@ -21,9 +21,8 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
       {
-
          $token = $this->generatePersonalAccessTokenController->generatePAT();
-         dump($token);
+         // creates a new token and links it to the user
          return ['token' => $token];
       }
    }

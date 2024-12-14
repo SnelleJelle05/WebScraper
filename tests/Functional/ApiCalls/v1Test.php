@@ -5,11 +5,12 @@
    use App\Factory\UserFactory;
    use App\Tests\Functional\BaseTestCase;
    use function PHPUnit\Framework\assertNotEmpty;
+   use function PHPUnit\Framework\assertSame;
    use function Zenstruck\Foundry\faker;
 
    class v1Test extends BaseTestCase
    {
-      public function testGetArticlesSuc()
+      public function testGetArticlesIUsSuc()
       {
          $userData = ['email' => faker()->email(), 'password' => 'password'];
          UserFactory::new()->create($userData);
@@ -25,7 +26,6 @@
          $jwt = $jsonJWT['token'];
          $this->get('/api/users/GeneratePersonalAccessToken', [], $jwt);
          $json = $this->jsonResponse();
-         dump($json);
          $pat = $json['token'];
          self::assertResponseIsSuccessful();
 
@@ -41,7 +41,10 @@
 
          $this->get($url, []);  // Pass the JWT token in the headers
          $json = $this->jsonResponse();
-         dump($json);
+         assertSame(3, $json['total']);
+         assertSame(200, $json['status']);
+         assertSame('English', $json['data'][0]['language']);
+         assertSame('United States', $json['data'][0]['sourceCountry']);
          self::assertResponseIsSuccessful();
       }
 
@@ -56,7 +59,6 @@
          ];
          $this->get('api/v1/news?' . http_build_query($parameters), []);
          $json = $this->jsonResponse();
-         dump($json);
          self::assertResponseStatusCodeSame(401);
 
       }

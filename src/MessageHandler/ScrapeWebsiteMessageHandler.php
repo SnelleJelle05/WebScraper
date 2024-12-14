@@ -31,14 +31,16 @@
 
       public function __invoke(ScrapeWebsiteMessage $message): string
       {
-         $websites = $message->getwebsites();
-
+         $websites = $message->getWebsites();
          if (!$websites) {
             throw new \InvalidArgumentException('No website URLs provided.');
          }
          $client = new Client();
          foreach ($websites as $website) {
             try {
+
+
+
                $websiteUrl = $website['url'];
                $response = $client->request('GET', $websiteUrl);
                $html = $response->getBody()->getContents();

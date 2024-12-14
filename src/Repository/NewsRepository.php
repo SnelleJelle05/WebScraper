@@ -19,7 +19,6 @@
        */
       public function SaveArticle($data): void
       {
-         dump($data);
          try {
             $news = (new News())
                 ->setTitle($data['title'])

@@ -17,10 +17,10 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsSchedule('GetArticlesOnSchedule')]
-final class MainSchedule implements ScheduleProviderInterface
+final readonly class MainSchedule implements ScheduleProviderInterface
 {
     public function __construct(
-        private readonly CacheInterface $cache, private readonly FetchUrlScheduler $fetchUrlScheduler,
+        private CacheInterface $cache, private FetchUrlScheduler $fetchUrlScheduler,
     ) {
     }
 
@@ -33,12 +33,19 @@ final class MainSchedule implements ScheduleProviderInterface
     */
    public function getSchedule(): Schedule
     {
-       $webSites = $this->fetchUrlScheduler->fetchNewsUrlSchedule();
-        return (new Schedule())
-            ->add(
-                 RecurringMessage::every('1 hour', new ScrapeWebsiteMessage($webSites)),
-            )
-            ->stateful($this->cache)
-        ;
+       try {
+          $websites = $this->fetchUrlScheduler->fetchNewsUrlSchedule();
+          if (empty($websites)) {
+             throw new \RuntimeException('No websites found to schedule scraping.');
+          }
+
+          return (new Schedule())
+              ->add(RecurringMessage::every('1 hour', new ScrapeWebsiteMessage($websites)))
+              ->stateful($this->cache);
+
+       } catch (\Exception $e) {
+          dump($e);
+          throw new \RuntimeException('Failed to create schedule.', 0, $e);
+       }
     }
 }

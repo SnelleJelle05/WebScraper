@@ -30,7 +30,6 @@
        */
       public function fetchNewsUrl($max, $language): array
       {
-         $language = 'Dutch';
 
          switch ($language) {
             case "unitedStates":
@@ -45,6 +44,7 @@
             default:
                $query = '(sourcecountry:US OR sourcecountry:UK) sourcelang:eng';
          }
+
          // gets ulr from GDELT API for scrape
          $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [

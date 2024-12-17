@@ -8,7 +8,6 @@
    use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
    use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
    use Symfony\Contracts\HttpClient\HttpClientInterface;
-   use Symfony\Contracts\HttpClient\ResponseInterface;
 
    readonly class FetchUrlSchedulerController
    {
@@ -17,41 +16,68 @@
       {
       }
 
-
       /**
        * @throws TransportExceptionInterface
        * @throws ServerExceptionInterface
        * @throws RedirectionExceptionInterface
        * @throws DecodingExceptionInterface
        * @throws ClientExceptionInterface
-       * @throws \Exception
        */
       public function fetchNewsUrlSchedule(): array
       {
-         $response = $this->request();
-         // Controleer of de API-aanroep succesvol was
-         if ($response->getStatusCode() !== 200) {
-            throw new \Exception('Failed to fetch data from GDELT API. -Contact me.');
-         }
+         $response = $this->requestArticles(5);
 
-         // Transformeer de API-respons naar een bruikbare array
-         $data = $response->toArray();
-         return $data['articles'] ?? [];
+         return $response['articles'] ?? [];
       }
 
       /**
+       * @throws DecodingExceptionInterface
+       * @throws ClientExceptionInterface
+       * @throws ServerExceptionInterface
+       * @throws RedirectionExceptionInterface
        * @throws TransportExceptionInterface
        */
-      private function request(): ResponseInterface
+      private function requestArticles($max): array
       {
-         return $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+         $responseUs = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
-                 'query' => '(sourcecountry:US OR sourcecountry:UK OR sourcecountry:NL) (sourcelang:eng OR sourcelang:NLD)',
+                 'query' => 'sourcecountry:US sourcelang:eng',
                  'mode' => 'ArtList',
-                 'maxrecords' => 5,
+                 'maxrecords' => $max,
                  'format' => 'json',
+                   'sort' => 'dateDesc',
                  'timespan' => '1hour',
              ],
          ]);
+
+         $responseUk = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+             'query' => [
+                 'query' => 'sourcecountry:UK sourcelang:eng',
+                 'mode' => 'ArtList',
+                 'maxrecords' => $max,
+                 'format' => 'json',
+                 'sort' => 'dateDesc',
+                 'timespan' => '1hour',
+             ],
+         ]);
+
+         $responseNl = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+             'query' => [
+                 'query' => 'sourcecountry:NL sourcelang:NLD',
+                 'mode' => 'ArtList',
+                 'maxrecords' => $max,
+                 'format' => 'json',
+                 'sort' => 'dateDesc',
+                 'timespan' => '1hour',
+             ],
+         ]);
+
+         //adds the data and converts it to  array and merges the data
+         $articlesUs = $responseUs->toArray()['articles'] ?? [];
+         $articlesNl = $responseNl->toArray()['articles'] ?? [];
+         $articlesUk = $responseUk->toArray()['articles'] ?? [];
+         $mergedArticles = array_merge($articlesUs, $articlesUk, $articlesNl);
+
+         return ['articles' => $mergedArticles];
       }
    }

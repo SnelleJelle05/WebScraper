@@ -29,9 +29,9 @@
        */
       public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
       {
-         $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+         $responseUs = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
-                 'query' => '(sourcecountry:US OR sourcecountry:UK OR sourcecountry:NL) (sourcelang:eng OR sourcelang:NLD)',
+                 'query' => 'sourcecountry:US sourcelang:eng',
                  'mode' => 'ArtList',
                  'maxrecords' => 1,
                  'format' => 'json',
@@ -39,8 +39,24 @@
                  'timespan' => '1 year',
              ],
          ]);
-         $data = $response->toArray();
-         $this->messageBus->dispatch(new ScrapeWebsiteMessage($data['articles']));
+         $responseNl = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+             'query' => [
+                 'query' => 'sourcecountry:NL sourcelang:NLD',
+                 'mode' => 'ArtList',
+                 'maxrecords' => 1,
+                 'format' => 'json',
+                 'sort' => 'ToneDesc',
+                 'timespan' => '1 year',
+             ],
+         ]);
+         $articlesUs = $responseUs->toArray()['articles'] ?? [];
+         $articlesNl = $responseNl->toArray()['articles'] ?? [];
+         $mergedArticles = array_merge($articlesUs, $articlesNl);
+
+         // Rebuild the final merged array
+         $mergedData = ['articles' => $mergedArticles];
+         dump($mergedData);
+         $this->messageBus->dispatch(new ScrapeWebsiteMessage($mergedData['articles']));
 
          return ['done'];
 

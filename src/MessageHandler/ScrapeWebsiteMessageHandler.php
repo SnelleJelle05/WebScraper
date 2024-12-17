@@ -3,6 +3,7 @@
    namespace App\MessageHandler;
 
    use App\Controller\Funtions\SentimentAnalyzerController;
+   use App\Controller\UrlController\FetchUrlSchedulerController;
    use App\Controller\ScrapeControllers\{ScrapeDateTimeController,
        ScrapeDescriptionController,
        ScrapeImageController,
@@ -13,6 +14,11 @@
    use GuzzleHttp\Client;
    use Symfony\Component\DomCrawler\Crawler;
    use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+   use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
    #[AsMessageHandler]
    final class ScrapeWebsiteMessageHandler
@@ -25,32 +31,44 @@
           private ScrapeImageController       $scrapeImageController,
           private ScrapeDateTimeController    $scrapeDateTimeController,
           private SentimentAnalyzerController $sentimentAnalyzerController,
+          private FetchUrlSchedulerController $fetchUrlScheduler,
       )
       {
       }
 
+      /**
+       * @throws TransportExceptionInterface
+       * @throws ServerExceptionInterface
+       * @throws RedirectionExceptionInterface
+       * @throws DecodingExceptionInterface
+       * @throws ClientExceptionInterface
+       */
       public function __invoke(ScrapeWebsiteMessage $message): string
       {
-         $websites = $message->getWebsites();
-         if (!$websites) {
-            throw new \InvalidArgumentException('No website URLs provided.');
+         // Fetch the websites to scrape
+         $websites = $this->fetchUrlScheduler->fetchNewsUrlSchedule();
+         if (empty($websites)) {
+            throw new \RuntimeException('No websites found to schedule scraping.');
          }
+
          $client = new Client();
          foreach ($websites as $website) {
             try {
-
-
-
                $websiteUrl = $website['url'];
                $response = $client->request('GET', $websiteUrl);
                $html = $response->getBody()->getContents();
                $crawler = new Crawler($html);
                $data = $this->CrawlData($crawler, $website);
-
                if ($data['title']) {
                   //only analyze sentiment if the title is not empty
                   $sentiment = $this->sentimentAnalyzerController->analyzerSentiment($data);
                   $data['sentiment'] = $sentiment;
+
+                  //check if the article already exists in the database
+                  $doubleInt = $this->newsRepository->CheckDoubles($data['title']);
+                  if($doubleInt > 0){
+                     continue; // Skip to the next article
+                  }
 
                   // must have a title to save the article
                   $this->newsRepository->SaveArticle($data);

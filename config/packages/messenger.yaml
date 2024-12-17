@@ -5,8 +5,8 @@ framework:
 
 
         routing:
-            # async is whatever name you gave your transport above
-            'App\Message\ScrapeWebsiteMessage': async
+#            App\Message\RemoveOldArticlesMessage: async            # async is whatever name you gave your transport above
+#            'App\Message\ScrapeWebsiteMessage': async
 
 # when@test:
 #    framework:

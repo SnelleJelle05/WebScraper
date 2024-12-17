@@ -1,0 +1,1 @@
+php bin/console messenger:consume scheduler_GetArticlesOnSchedule

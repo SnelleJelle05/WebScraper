@@ -7,28 +7,42 @@
    use App\Message\ScrapeWebsiteMessage;
    use Symfony\Component\Messenger\Exception\ExceptionInterface;
    use Symfony\Component\Messenger\MessageBusInterface;
+   use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+   use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+   use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-   class TestProvider implements ProviderInterface
+   readonly class TestProvider implements ProviderInterface
    {
-      private MessageBusInterface $messageBus;
 
-      public function __construct(MessageBusInterface $messageBus)
+      public function __construct(
+          private MessageBusInterface $messageBus,
+          private HttpClientInterface $client
+      )
       {
-         $this->messageBus = $messageBus;
       }
 
       /**
        * @throws \Exception
        * @throws ExceptionInterface
+       * @throws TransportExceptionInterface
+       * @throws DecodingExceptionInterface
        */
-      public function provide(Operation $operation, array $uriVariables = [], array $context = []): \Symfony\Component\Messenger\Envelope
+      public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
       {
-         $websiteUrls = [
-//             ["url" => 'https://abc6onyourside.com/news/local/patients-worried-about-coverage-amid-osu-insurance-contract-battle-anthem-blue-cross-blue-shield-contract-negotiation-standoff'],
-             ["url" => 'https://921thebeat.iheart.com/content/2024-12-07-timeless-hit-crowned-most-popular-christmas-song-of-all-time/'],
-         ];
+         $response = $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
+             'query' => [
+                 'query' => '(sourcecountry:US OR sourcecountry:UK OR sourcecountry:NL) (sourcelang:eng OR sourcelang:NLD)',
+                 'mode' => 'ArtList',
+                 'maxrecords' => 1,
+                 'format' => 'json',
+                 'sort' => 'ToneDesc',
+                 'timespan' => '1 year',
+             ],
+         ]);
+         $data = $response->toArray();
+         $this->messageBus->dispatch(new ScrapeWebsiteMessage($data['articles']));
 
-         return $this->messageBus->dispatch(new ScrapeWebsiteMessage($websiteUrls));
+         return ['done'];
 
       }
    }

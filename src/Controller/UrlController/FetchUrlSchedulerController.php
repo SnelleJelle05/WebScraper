@@ -8,14 +8,13 @@
    use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
    use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
    use Symfony\Contracts\HttpClient\HttpClientInterface;
+   use Symfony\Contracts\HttpClient\ResponseInterface;
 
-   class FetchUrlScheduler
+   readonly class FetchUrlSchedulerController
    {
-      private HttpClientInterface $client;
 
-      public function __construct(HttpClientInterface $client)
+      public function __construct(private HttpClientInterface $client)
       {
-         $this->client = $client;
       }
 
 
@@ -40,17 +39,18 @@
          return $data['articles'] ?? [];
       }
 
-      private function request(): \Symfony\Contracts\HttpClient\ResponseInterface
+      /**
+       * @throws TransportExceptionInterface
+       */
+      private function request(): ResponseInterface
       {
-
          return $this->client->request('GET', "https://api.gdeltproject.org/api/v2/doc/doc", [
              'query' => [
                  'query' => '(sourcecountry:US OR sourcecountry:UK OR sourcecountry:NL) (sourcelang:eng OR sourcelang:NLD)',
                  'mode' => 'ArtList',
-                 'maxrecords' => 250,
+                 'maxrecords' => 5,
                  'format' => 'json',
-                 'sort' => 'DateDesc',
-                 'timespan' => '1d',
+                 'timespan' => '1hour',
              ],
          ]);
       }

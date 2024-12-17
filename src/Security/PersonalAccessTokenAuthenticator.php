@@ -6,6 +6,7 @@
    use Symfony\Component\HttpFoundation\Request;
    use Symfony\Component\HttpFoundation\Response;
    use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+   use Symfony\Component\Security\Core\Exception\AccessDeniedException;
    use Symfony\Component\Security\Core\Exception\AuthenticationException;
    use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
    use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -29,13 +30,13 @@
       {
          $apiKey = $request->query->all()['apiKey'] ?? null;
          if (!$apiKey) {
-            throw new AuthenticationException('PAT Key is required');
+            throw new AccessDeniedException('No API key provided');
          }
 
          $token = $this->personalAccessTokenRepository->findUserByToken($apiKey);
-
          if (!$token) {
-            throw new AuthenticationException('Invalid API Key');
+            dump('123');
+            throw new AccessDeniedException('Invalid API key');
          }
 
          return new Passport(
@@ -59,6 +60,10 @@
 
       public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
       {
-         throw new AuthenticationException('Authentication Failed, check tour API Key');
+         return new Response(
+             json_encode(['error' => $exception->getMessage()]),
+             Response::HTTP_UNAUTHORIZED,
+             ['Content-Type' => 'application/json']
+         );
       }
    }

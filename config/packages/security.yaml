@@ -24,13 +24,26 @@ security:
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-    api:
-      pattern: ^/api/
+    # JWT authentication for /api/users routes
+    api_users:
+      pattern: ^/api/users
       stateless: true
       provider: app_user_provider
       jwt: ~
-      custom_authenticator:
-        - App\Security\PersonalAccessTokenAuthenticator
+#      enables JWT
+
+    # Custom authenticator for /api/v1/news routes
+    api_news:
+      pattern: ^/api/v1/news
+      stateless: true
+      provider: app_user_provider
+      custom_authenticator: App\Security\PersonalAccessTokenAuthenticator
+
+    # Default fallback firewall (optional)
+    main:
+      pattern: ^/
+      stateless: true
+      provider: app_user_provider
 
   access_control:
   # - { path: ^/admin, roles: ROLE_ADMIN }

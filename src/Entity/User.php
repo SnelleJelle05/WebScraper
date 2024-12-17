@@ -26,7 +26,6 @@
                provider: GeneratePersonalAccessTokenProvider::class
            ),
            new Post(),
-           new GetCollection(),
        ],
        normalizationContext: ['groups' => ['user:read']],
        denormalizationContext: ['groups' => ['user:write']]

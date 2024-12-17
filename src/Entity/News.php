@@ -7,7 +7,6 @@
    use ApiPlatform\Metadata\QueryParameter;
    use ApiPlatform\OpenApi\Model\Parameter;
    use App\Repository\UserRepository;
-   use App\State\Providers\News\DataProvider;
    use App\State\Providers\News\NewsDataBaseProvider;
    use Doctrine\DBAL\Types\Types;
    use Doctrine\ORM\Mapping as ORM;

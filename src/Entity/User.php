@@ -50,9 +50,6 @@
       #[Groups(['user:read'])]
       private array $roles = [];
 
-      /**
-       * @var string The hashed password
-       */
       #[ORM\Column]
       #[Groups(['user:read'])]
       private ?string $password = null;
@@ -147,29 +144,11 @@
        */
       public function eraseCredentials(): void
       {
-//         If you store any temporary, sensitive data on the user, clear it here
          $this->plainPassword = null;
       }
 
       public function getPersonalAccessToken(): ?PersonalAccessToken
       {
          return $this->personalAccessToken;
-      }
-
-      public function setPersonalAccessToken(?PersonalAccessToken $personalAccessToken): static
-      {
-         // unset the owning side of the relation if necessary
-         if ($personalAccessToken === null && $this->personalAccessToken !== null) {
-            $this->personalAccessToken->setRelatedUser(null);
-         }
-
-         // set the owning side of the relation if necessary
-         if ($personalAccessToken !== null && $personalAccessToken->getRelatedUser() !== $this) {
-            $personalAccessToken->setRelatedUser($this);
-         }
-
-         $this->personalAccessToken = $personalAccessToken;
-
-         return $this;
       }
    }

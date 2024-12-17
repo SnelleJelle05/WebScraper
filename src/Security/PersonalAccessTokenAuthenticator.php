@@ -23,12 +23,13 @@
       public function supports(Request $request): ?bool
       {
          //used on every /api request
-         return (str_starts_with($request->getPathInfo(), '/api/v1/news') && $request->isMethod('GET'));
+         return (str_starts_with($request->getPathInfo(), '/api/news/v1') && $request->isMethod('GET'));
       }
 
       public function authenticate(Request $request): Passport
       {
          $apiKey = $request->query->all()['apiKey'] ?? null;
+         dump($apiKey);
          if (!$apiKey) {
             throw new AccessDeniedException('No API key provided');
          }

@@ -7,8 +7,6 @@
 
    class BaseTestCase extends WebTestCase
    {
-
-
       protected \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
       public string $password = "password";
 

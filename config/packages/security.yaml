@@ -34,7 +34,7 @@ security:
 
     # Custom authenticator for /api/v1/news routes
     api_news:
-      pattern: ^/api/v1/news
+      pattern: ^/api/news/v1
       stateless: true
       provider: app_user_provider
       custom_authenticator: App\Security\PersonalAccessTokenAuthenticator

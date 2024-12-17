@@ -37,7 +37,7 @@
              'sourceCountry' => 'United States',
          ];
 
-         $url = '/api/v1/news?' . http_build_query($parameters);
+         $url = '/api/news/v1?' . http_build_query($parameters);
 
          $this->get($url, []);  // Pass the JWT token in the headers
          $json = $this->jsonResponse();
@@ -57,8 +57,7 @@
              'sourceCountry' => 'United States',
              'apikey' => 'your_api_key',
          ];
-         $this->get('api/v1/news?' . http_build_query($parameters), []);
-         $json = $this->jsonResponse();
+         $this->get('api/news/v1?' . http_build_query($parameters), []);
          self::assertResponseStatusCodeSame(401);
 
       }

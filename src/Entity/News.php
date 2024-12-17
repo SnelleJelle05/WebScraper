@@ -21,7 +21,7 @@
    #[ApiResource(
        operations: [
            new GetCollection(
-               uriTemplate: '/v1/news',
+               uriTemplate: 'news/v1',
                description: "Get news articles from the database",
                normalizationContext: ['groups' => ['user:read']],
                provider: NewsDataBaseProvider::class,

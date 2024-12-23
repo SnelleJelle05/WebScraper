@@ -13,6 +13,7 @@
    use Symfony\Component\Security\Core\User\UserInterface;
    use Symfony\Component\Serializer\Attribute\Groups;
    use Symfony\Component\Serializer\Attribute\SerializedName;
+   use Symfony\Component\Validator\Constraints\Email;
    use Symfony\Component\Validator\Constraints\NotBlank;
 
    #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -41,6 +42,7 @@
       #[ORM\Column(length: 180)]
       #[NotBlank]
       #[Groups(['user:read', 'user:write'])]
+      #[Email]
       private ?string $email = null;
 
       /**

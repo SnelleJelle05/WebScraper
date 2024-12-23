@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Create the directory if it doesn't exist
+mkdir -p config/jwt-prod
+
+# Generate the private key
+openssl genrsa -out config/jwt-prod/private.pem 4096
+
+# Generate the public key
+openssl rsa -pubout -in config/jwt-prod/private.pem -out config/jwt-prod/public.pem
+
+# Set permissions
+chmod 600 config/jwt-prod/private.pem
+chmod 644 config/jwt-prod/public.pem

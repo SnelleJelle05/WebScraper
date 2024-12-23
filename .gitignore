@@ -20,7 +20,6 @@
 ###< phpunit/phpunit ###
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
-/config/jwt-prod/*.pem
+#/config/jwt/*.pem
 
 ###< lexik/jwt-authentication-bundle ###

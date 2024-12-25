@@ -3,7 +3,6 @@ framework:
         transports:
             async: "%env(MESSENGER_TRANSPORT_DSN)%"
 
-
         routing:
             App\Message\RemoveOldArticlesMessage: async            # async is whatever name you gave your transport above
             'App\Message\ScrapeWebsiteMessage': async

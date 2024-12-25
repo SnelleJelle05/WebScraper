@@ -2,4 +2,4 @@
 
 composer install
 
-php bin/console messenger:consume scheduler_GetArticles OnSchedule
+php bin/console messenger:consume MainSchedule

@@ -2,4 +2,4 @@
 
 composer install
 
-php bin/console messenger:consume scheduler_Main
+#php bin/console messenger:consume scheduler_Main

@@ -29,14 +29,12 @@
       public function authenticate(Request $request): Passport
       {
          $apiKey = $request->query->all()['apiKey'] ?? null;
-         dump($apiKey);
          if (!$apiKey) {
             throw new AccessDeniedException('No API key provided');
          }
 
          $token = $this->personalAccessTokenRepository->findUserByToken($apiKey);
          if (!$token) {
-            dump('123');
             throw new AccessDeniedException('Invalid API key');
          }
 

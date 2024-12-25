@@ -69,6 +69,5 @@
              ->getQuery();
 
          $result = $qb->execute(); // This returns the number of rows affected
-         dump($result); // Dump the result to see the number of deleted rows
       }
    }

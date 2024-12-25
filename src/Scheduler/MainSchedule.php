@@ -16,7 +16,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-#[AsSchedule('MainSchedule')]
+#[AsSchedule('Main')]
 final readonly class MainSchedule implements ScheduleProviderInterface
 {
     public function __construct(
@@ -41,7 +41,7 @@ final readonly class MainSchedule implements ScheduleProviderInterface
           }
 
           return (new Schedule())
-              ->add(RecurringMessage::every('1 hour', new ScrapeWebsiteMessage($websites)))
+              ->add(RecurringMessage::every('1 minute', new ScrapeWebsiteMessage($websites)))
               ->add(RecurringMessage::every('7 week', new RemoveOldArticlesMessage()))
               ->stateful($this->cache);
 

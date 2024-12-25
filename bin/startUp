@@ -9,4 +9,4 @@ sleep 3
 symfony serve -d
 docker compose up -d
 
-php bin/console messenger:consume scheduler_MainScheduler
+php bin/console messenger:consume scheduler_Main

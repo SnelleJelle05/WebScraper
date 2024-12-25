@@ -25,7 +25,7 @@
        */
       public function fetchNewsUrlSchedule(): array
       {
-         $response = $this->requestArticles(5);
+         $response = $this->requestArticles(25);
 
          return $response['articles'] ?? [];
       }

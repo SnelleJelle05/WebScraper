@@ -41,7 +41,7 @@ final readonly class MainSchedule implements ScheduleProviderInterface
           }
 
           return (new Schedule())
-              ->add(RecurringMessage::every('1 minute', new ScrapeWebsiteMessage($websites)))
+              ->add(RecurringMessage::every('2 minute', new ScrapeWebsiteMessage($websites)))
               ->add(RecurringMessage::every('7 week', new RemoveOldArticlesMessage()))
               ->stateful($this->cache);
 

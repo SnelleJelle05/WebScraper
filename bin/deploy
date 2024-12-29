@@ -1,2 +1,7 @@
 #!/bin/bash
+echo "Deploy file!"
+
 composer install
+composer require symfony/css-selector
+
+php bin/console messenger:consume scheduler_Main
